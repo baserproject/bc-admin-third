@@ -1,12 +1,12 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 use BaserCore\View\BcAdminAppView;
@@ -30,8 +30,9 @@ $this->BcBaser->js('admin/search.bundle', true, [
 
 
 <div class="bca-search">
-  <h2 class="head bca-search__head"><a href="javascript:void(0)" id="BtnMenuSearch"
-                                       class="bca-icon--search"><?php echo __d('baser', '絞り込み検索') ?></a></h2>
+  <h2 class="head bca-search__head">
+    <a href="javascript:void(0)" id="BtnMenuSearch"class="bca-icon--search"><?php echo __d('baser', '絞り込み検索') ?></a>
+  </h2>
   <div id="Search" class="body bca-search__body">
     <?php $this->BcBaser->element('search/' . $search) ?>
   </div>

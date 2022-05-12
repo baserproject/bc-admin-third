@@ -1,19 +1,20 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
-use BaserCore\View\AppView;
+use BaserCore\View\BcAdminAppView;
 
 /**
  * sidebar
- * @var AppView $this
+ * @var BcAdminAppView $this
+ * @var bool $useAdminSideBanner
  */
 ?>
 
@@ -21,7 +22,6 @@ use BaserCore\View\AppView;
 <div id="SideBar" class="bca-nav">
   <?php // TODO : 要実装 ?>
   <?php // $this->BcBaser->element('favorite_menu') ?>
-  <?php // $this->BcBaser->element('permission') ?>
 
   <nav class="bca-nav__main" data-js-tmpl="AdminMenu" hidden>
     <h2 class="bca-nav__main-title"><?php echo __d('baser', '管理メニュー') ?></h2>
@@ -69,7 +69,7 @@ use BaserCore\View\AppView;
 
   <nav class="bca-nav__main" data-js-container="AdminMenu" hidden></nav>
 
-  <?php if (!empty($this->BcBaser->siteConfig['admin_side_banner'])): ?>
+  <?php if ($useAdminSideBanner): ?>
     <div id="BannerArea" class="bca-banners">
       <ul class="bca-banners__ul">
         <li class="bca-banners__li"><a href="https://market.basercms.net/" target="_blank"><img

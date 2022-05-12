@@ -1,21 +1,23 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 use BaserCore\Model\Entity\User;
-use BaserCore\View\AppView;
+use BaserCore\View\BcAdminAppView;
 
 /**
  * Users Form
- * @var AppView $this
+ * @var BcAdminAppView $this
  * @var User $user
+ * @var array $userGroupList
+ * @var bool $isUserGroupEditable
  */
 $this->BcBaser->i18nScript([
   'alertMessage1' => __d('baser', '処理に失敗しました。'),
@@ -24,13 +26,15 @@ $this->BcBaser->i18nScript([
   'confirmMessage2' => __d('baser', '登録されている「よく使う項目」を、このユーザーが所属するユーザーグループの初期設定として登録します。よろしいですか？'),
   'infoMessage1' => __d('baser', '登録されている「よく使う項目」を所属するユーザーグループの初期値として設定しました。'),
 ]);
-$userGroups = $this->BcUserManage->getUserGroupList();
+$this->BcBaser->js('admin/users/form.bundle', false);
 ?>
 
-<div id="SelfUpdate" style="display: none"><?php echo $this->BcUserManage->isSelfUpdate($user->id) ?></div>
-<div id="AlertMessage" style="display: none"></div>
-<div id="UserGroupSetDefaultFavoritesUrl"
-     style="display:none"><?php $this->BcBaser->url(['controller' => 'user_groups', 'action' => 'set_default_favorites', @$this->request->getData('UserGroup.id')]) ?></div>
+
+<?php // 自動入力を防止する為のダミーフィールド ?>
+<input type="text" name="dummy-email" style="top:-100px;left:-100px;position:fixed;">
+<?php $this->BcAdminForm->unlockFields('dummy-email') ?>
+<input type="password" name="dummy-pass" autocomplete="off" style="top:-100px;left:-100px;position:fixed;">
+<?php $this->BcAdminForm->unlockFields('dummy-pass') ?>
 
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
@@ -87,12 +91,12 @@ $userGroups = $this->BcUserManage->getUserGroupList();
         class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('user_group_id', __d('baser', 'グループ')) ?>
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
       <td class="col-input bca-form-table__input">
-        <?php if ($this->BcUserManage->isEditable($user->id)): ?>
-          <?php echo $this->BcAdminForm->control('user_groups._ids', ['type' => 'multiCheckbox', 'options' => $userGroups, 'error' => false]); ?>
+        <?php if ($isUserGroupEditable): ?>
+          <?php echo $this->BcAdminForm->control('user_groups._ids', ['type' => 'multiCheckbox', 'options' => $userGroupList, 'error' => false]); ?>
           <i class="bca-icon--question-circle btn help bca-help"></i>
           <div id="helptextUserGroupId"
                class="helptext"><?php echo sprintf(__d('baser', 'ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには%sより新しいグループを追加しアクセス制限の設定をおこないます。'), $this->BcBaser->getLink(__d('baser', 'ユーザーグループ管理'), ['controller' => 'user_groups', 'action' => 'index'])) ?></div>
-          <?php echo $this->BcAdminForm->error('user_groups', __d('baser', 'グループを選択してください')) ?>
+          <?php echo $this->BcAdminForm->error('user_groups') ?>
         <?php else: ?>
           <?php foreach($user->user_groups as $group): ?>
             <span><?php echo h($group->title) ?></span>
@@ -104,8 +108,6 @@ $userGroups = $this->BcUserManage->getUserGroupList();
       <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('email', __d('baser', 'Eメール')) ?>
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
       <td class="col-input bca-form-table__input">
-        <input type="text" name="dummy-email" style="top:-100px;left:-100px;position:fixed;">
-        <?php $this->BcAdminForm->unlockFields('dummy-email') ?>
         <?php echo $this->BcAdminForm->control('email', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
         <i class="bca-icon--question-circle btn help bca-help"></i>
         <div id="helptextEmail" class="helptext">
@@ -125,9 +127,6 @@ $userGroups = $this->BcUserManage->getUserGroupList();
       <td class="col-input bca-form-table__input">
         <?php if ($this->request->getParam('action') == 'edit'): ?><small>
           [<?php echo __d('baser', 'パスワードは変更する場合のみ入力してください') ?>]</small><br/><?php endif ?>
-        <!-- ↓↓↓自動入力を防止する為のダミーフィールド↓↓↓ -->
-        <input type="password" name="dummy-pass" autocomplete="off" style="top:-100px;left:-100px;position:fixed;">
-        <?php $this->BcAdminForm->unlockFields('dummy-pass') ?>
         <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
         <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
         <i class="bca-icon--question-circle btn help bca-help"></i>

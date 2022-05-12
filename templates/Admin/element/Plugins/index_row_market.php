@@ -1,12 +1,12 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 use BaserCore\View\AppView;
@@ -39,7 +39,7 @@ use BaserCore\View\AppView;
   <td
     class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['author'], $data['authorLink'], ['target' => '_blank', 'escape' => true]) ?></td>
   <td class="bca-table-listup__tbody-td" style="width:10%;white-space: nowrap">
-    <?php echo $this->BcTime->format($data['created'], 'YYYY-MM-dd') ?><br/>
-    <?php echo $this->BcTime->format($data['modified'], 'YYYY-MM-dd') ?>
+    <?php echo $this->BcTime->format($data['created'], 'yyyy-MM-dd') ?><br/>
+    <?php echo $this->BcTime->format($data['modified'], 'yyyy-MM-dd') ?>
   </td>
 </tr>

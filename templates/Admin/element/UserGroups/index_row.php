@@ -1,12 +1,12 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 use BaserCore\Model\Entity\UserGroup;
@@ -32,14 +32,14 @@ use BaserCore\View\AppView;
   </td>
   <td class="bca-table-listup__tbody-td"><?php echo h($userGroup->title) ?></td>
   <?php echo $this->BcListTable->dispatchShowRow($userGroup) ?>
-  <td class="bca-table-listup__tbody-td"><?php echo $this->BcTime->format($userGroup->created, 'YYYY-MM-dd') ?><br/>
-    <?php echo $this->BcTime->format($userGroup->modified, 'YYYY-MM-dd') ?></td>
+  <td class="bca-table-listup__tbody-td"><?php echo $this->BcTime->format($userGroup->created, 'yyyy-MM-dd') ?><br/>
+    <?php echo $this->BcTime->format($userGroup->modified, 'yyyy-MM-dd') ?></td>
   <td class="bca-table-listup__tbody-td">
     <?php if ($userGroup->name != 'admins'): ?>
       <?php $this->BcBaser->link('', ['controller' => 'permissions', 'action' => 'index', $userGroup->id], ['title' => __d('baser', '制限'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'permission', 'data-bca-btn-size' => 'lg']) ?>
     <?php endif ?>
     <?php $this->BcBaser->link('', ['action' => 'edit', $userGroup->id], ['title' => __d('baser', '編集'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
-    <?php echo $this->BcForm->postLink(
+    <?php echo $this->BcAdminForm->postLink(
       '',
       ['action' => 'copy', $userGroup->id],
       ['title' => __d('baser', 'コピー'),
@@ -48,7 +48,7 @@ use BaserCore\View\AppView;
         'data-bca-btn-size' => 'lg']
     ) ?>
     <?php if ($userGroup->name != 'admins'): ?>
-      <?= $this->BcForm->postLink(
+      <?= $this->BcAdminForm->postLink(
         '',
         ['action' => 'delete', $userGroup->id],
         ['block' => true,

@@ -1,12 +1,12 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 $this->BcBaser->i18nScript([
@@ -34,14 +34,14 @@ $this->BcAdmin->setHelp('plugins_index');
 <div id="tabs">
   <ul>
     <li><a href="#DataList"><?php echo __d('baser', '所有プラグイン') ?></a></li>
-    <li><a href="#BaserMarket"><?php echo __d('baser', 'baserマーケット') ?></a></li>
+<!--    <li><a href="#BaserMarket">--><?php //echo __d('baser', 'baserマーケット') ?><!--</a></li>-->
   </ul>
   <div id="DataList"
        class="bca-data-list"><?php $this->BcBaser->element('Plugins/index_list') ?></div>
-  <div id="BaserMarket">
-    <div style="padding:20px;text-align:center;">
-      <?php $this->BcBaser->img('admin/ajax-loader.gif', ['alt' => 'Loading...']) ?>
-    </div>
-  </div>
+<!--  <div id="BaserMarket">-->
+<!--    <div style="padding:20px;text-align:center;">-->
+<!--      --><?php //$this->BcBaser->img('admin/ajax-loader.gif', ['alt' => 'Loading...']) ?>
+<!--    </div>-->
+<!--  </div>-->
 </div>
 <?= $this->fetch('postLink') ?>

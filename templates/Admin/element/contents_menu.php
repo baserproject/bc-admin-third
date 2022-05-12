@@ -1,12 +1,12 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 use BaserCore\View\BcAdminAppView;
@@ -34,11 +34,13 @@ use BaserCore\View\BcAdminAppView;
           <?php // TODO: button要素に変更 ?>
           <?php $this->BcBaser->link(__d('baser', 'ヘルプ'), 'javascript:void(0)', ['id' => 'BtnMenuHelp', 'class' => 'bca-content-menu__link bca-icon--help']) ?></li>
       <?php endif ?>
-      <?php if ($isLogin): ?>
+
+      <?php if ($isSuperUser): ?>
         <li class="bca-content-menu__item">
+          <?php $this->BcBaser->element('Permissions/dialog') ?>
           <?php // TODO: button要素に変更 ?>
           <?php // TODO アクセス制限を実装 ?>
-          <?php //$this->BcBaser->link(__d('baser', '制限'), 'javascript:void(0)', ['id' => 'BtnMenuPermission', 'class' => 'bca-content-menu__link bca-icon--permission']) ?></li>
+          <?php $this->BcBaser->link(__d('baser', '制限'), 'javascript:void(0)', ['id' => 'BtnMenuPermission', 'class' => 'bca-content-menu__link bca-icon--permission']) ?></li>
       <?php endif ?>
     </ul>
   </div>

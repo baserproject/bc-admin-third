@@ -1,11 +1,11 @@
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 (function ($) {
@@ -22,9 +22,34 @@
         baseUrl: null,
 
         /**
+         * BaserCoreプレフィックス
+         */
+        baserCorePrefix: null,
+
+        /**
          * 管理画面用URLプレフィックス
          */
         adminPrefix: null,
+
+        /**
+         * 管理画面用のベースURL
+         */
+        adminBaseUrl: null,
+
+        /**
+         * API用のベースURL
+         */
+        apiBaseUrl: null,
+
+        /**
+         * Ajaxローダーのパス
+         */
+        ajaxLoaderPath: null,
+
+        /**
+         * Ajaxローダー（小）のパス
+         */
+        ajaxLoaderSmallPath: null,
 
         /**
          * 初期化
@@ -34,13 +59,28 @@
         init: function (config) {
             var adminScript = $("#AdminScript");
             $.bcUtil.baseUrl = adminScript.attr('data-baseUrl');
+            $.bcUtil.baserCorePrefix = adminScript.attr('data-baserCorePrefix');
             $.bcUtil.adminPrefix = adminScript.attr('data-adminPrefix');
+            $.bcUtil.ajaxLoaderPath = adminScript.attr('data-ajaxLoaderPath');
+            $.bcUtil.ajaxLoaderSmallPath = adminScript.attr('data-ajaxLoaderSmallPath');
+            $.bcUtil.frontFullUrl = adminScript.attr('data-frontFullUrl');
             if (config.baseUrl !== undefined) {
                 $.bcUtil.baseUrl = config.baseUrl;
+            }
+            if (config.baserCorePrefix !== undefined) {
+                $.bcUtil.baserCorePrefix = config.baserCorePrefix;
             }
             if (config.adminPrefix !== undefined) {
                 $.bcUtil.adminPrefix = config.adminPrefix;
             }
+            if (config.ajaxLoaderPath !== undefined) {
+                $.bcUtil.ajaxLoaderPath = config.ajaxLoaderPath;
+            }
+            if (config.ajaxLoaderSmallPath !== undefined) {
+                $.bcUtil.ajaxLoaderSmallPath = config.ajaxLoaderSmallPath;
+            }
+            $.bcUtil.adminBaseUrl = $.bcUtil.baseUrl + '/' + $.bcUtil.baserCorePrefix + '/' + $.bcUtil.adminPrefix + '/';
+            $.bcUtil.apiBaseUrl = $.bcUtil.baseUrl + '/' + $.bcUtil.baserCorePrefix + '/api/';
         },
         /**
          * アラートメッセージを表示
@@ -94,12 +134,12 @@
                     break;
                 case 'inner':
                     var div = $('<div>').css({'text-align': 'center'}).attr('id', key);
-                    var img = $('<img>').attr('src', $.baseUrl + '/img/admin/ajax-loader.gif');
+                    var img = $('<img>').attr('src', $.bcUtil.ajaxLoaderPath);
                     div.html(img);
                     $(selector).html(div);
                     break;
                 case 'after':
-                    var img = $('<img>').attr('src', $.baseUrl + '/img/admin/ajax-loader-s.gif').attr('id', key);
+                    var img = $('<img>').attr('src', $.bcUtil.ajaxLoaderSmallPath).attr('id', key).css('width', '16px');
                     $(selector).after(img);
                     break;
                 case 'target':
@@ -159,6 +199,9 @@
             }
             var ajaxConfig = {
                 url: url,
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
                 type: 'POST',
                 dataType: 'html',
                 beforeSend: function () {
@@ -170,7 +213,7 @@
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    $.bcUtil.showAjaxError('処理に失敗しました。', XMLHttpRequest, errorThrown);
+                    $.bcUtil.showAjaxError(bcI18n.commonExecFailedMessage, XMLHttpRequest, errorThrown);
                 },
                 success: success
             };
@@ -190,12 +233,15 @@
         showAjaxError: function (message, XMLHttpRequest, errorThrown) {
             var errorMessage = '';
             if (XMLHttpRequest !== undefined && XMLHttpRequest.status) {
-                errorMessage = '<br />(' + XMLHttpRequest.status + ') ';
+                errorMessage = '<br>(' + XMLHttpRequest.status + ') ';
+            }
+            if(XMLHttpRequest !== undefined && XMLHttpRequest.responseJSON){
+                errorMessage += XMLHttpRequest.responseJSON.message;
             }
             if (XMLHttpRequest !== undefined && XMLHttpRequest.responseText) {
-                errorMessage += XMLHttpRequest.responseText;
+                errorMessage += '<br>' + XMLHttpRequest.responseText;
             } else if (errorThrown !== undefined) {
-                errorMessage += errorThrown;
+                errorMessage += '<br>' + errorThrown;
             }
             $.bcUtil.showAlertMessage(message + errorMessage);
         }

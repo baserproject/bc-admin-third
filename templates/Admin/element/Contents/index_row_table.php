@@ -10,133 +10,221 @@
  * @license         https://basercms.net/license/index.html
  */
 
+use BaserCore\Model\Entity\Content;
+use BaserCore\View\BcAdminAppView;
+
 /**
  * コンテンツ一覧 テーブル行
  *
- * @var BcAppView $this
+ * @var BcAdminAppView $this
+ * @var array $authorList
+ * @var Content $content
+ * @var int $count
  */
 
-$isSiteRelated = $this->BcContents->isSiteRelated($data);
-$isPublish = $this->BcContents->isAllowPublish($data, true);
-$isSiteRoot = $data['Content']['site_root'];
-$isAlias = (boolean)$data['Content']['alias_id'];
-if (!empty($this->BcContents->settings[$data['Content']['type']])) {
-  $type = $data['Content']['type'];
+$isSiteRelated = $this->BcContents->isSiteRelated($content);
+$isPublish = $this->BcContents->isAllowPublish($content, true);
+$isSiteRoot = $content->site_root;
+$isAlias = (boolean)$content->alias_id;
+$items = $this->BcContents->getConfig('items');
+if (!empty($items[$content->type])) {
+  $type = $content->type;
 } else {
   $type = 'Default';
 }
 if ($isAlias) {
-  $editDisabled = !$this->BcContents->isActionAvailable('ContentAlias', 'edit', $data['Content']['entity_id']);
-  $manageDisabled = !$this->BcContents->isActionAvailable('ContentAlias', 'manage', $data['Content']['entity_id']);
+  $editDisabled = !$this->BcContents->isActionAvailable('ContentAlias', 'edit', $content->entity_id);
+  $manageDisabled = !$this->BcContents->isActionAvailable('ContentAlias', 'manage', $content->entity_id);
 } else {
-  $editDisabled = !$this->BcContents->isActionAvailable($data['Content']['type'], 'edit', $data['Content']['entity_id']);
-  $manageDisabled = !$this->BcContents->isActionAvailable($data['Content']['type'], 'manage', $data['Content']['entity_id']);
+  $editDisabled = !$this->BcContents->isActionAvailable($content->type, 'edit', $content->entity_id);
+  $manageDisabled = !$this->BcContents->isActionAvailable($content->type, 'manage', $content->entity_id);
 }
-$typeTitle = $this->BcContents->settings[$type]['title'];
-if (!empty($this->BcContents->settings[$type]['icon'])) {
-  $iconPath = $this->BcContents->settings[$type]['icon'];
+$typeTitle = @$items[$type]['title'];
+if (!empty($items[$type]['icon'])) {
+  $iconPath = $items[$type]['icon'];
 } else {
-  $iconPath = $this->BcContents->settings['Default']['icon'];
+  $iconPath = @$items['Default']['icon'];
 }
 $isImageIcon = false;
 if (preg_match('/^admin\//', $iconPath)) {
   $isImageIcon = true;
-  if ($data['Content']['plugin'] != 'Core' && $type != 'Default') {
-    $iconPath = $data['Content']['plugin'] . '.' . $iconPath;
+  if ($content->plugin != 'BaserCore' && $type != 'Default') {
+    $iconPath = $content->plugin . '.' . $iconPath;
   }
 }
-$urlParams = ['content_id' => $data['Content']['id']];
-if ($data['Content']['entity_id']) {
-  $urlParams = array_merge($urlParams, [$data['Content']['entity_id']]);
+$urlParams = ['content_id' => $content->id];
+if ($content->entity_id) {
+  $urlParams = array_merge($urlParams, [$content->entity_id]);
 }
-$fullUrl = $this->BcContents->getUrl($data['Content']['url'], true, $data['Site']['use_subdomain']);
+$fullUrl = $this->BcContents->getUrl($content->url, true, @$content['Site']['use_subdomain']);
 $toStatus = 'publish';
-if ($data['Content']['self_status']) {
+if ($content->self_status) {
   $toStatus = 'unpublish';
 }
 ?>
 
 
-<tr id="Row<?php echo $count + 1 ?>"<?php $this->BcListTable->rowClass($isPublish, $data) ?>>
-  <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--select"><?php // 選択 ?>
-    <?php if ($this->BcBaser->isAdminUser() && empty($data['Content']['site_root'])): ?>
-      <?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . $data['Content']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">チェックする</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['Content']['id']]) ?>
+<tr id="Row<?= $count + 1 ?>"<?php echo $this->BcListTable->rowClass($isPublish, $content) ?>>
+  <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--select">
+    <?php if ($this->BcBaser->isAdminUser() && empty($content->site_root)): ?>
+      <?php echo $this->BcAdminForm->control(
+        'ListTool.batch_targets.' . $content->id, [
+        'type' => 'checkbox',
+        'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>',
+        'class' => 'batch-targets bca-checkbox__input',
+        'value' => $content->id,
+        'escape' => false
+      ]) ?>
     <?php endif ?>
   </td>
-  <td class="bca-table-listup__tbody-td" style="width:5%"><?php echo $data['Content']['id'] ?></td>
+  <td class="bca-table-listup__tbody-td" style="width:5%"><?= $content->id; ?></td>
   <td class="bca-table-listup__tbody-td" style="width:5%">
     <?php if ($isImageIcon): ?>
       <?php $this->BcBaser->img($iconPath, ['title' => $typeTitle]) ?>
     <?php else: ?>
-      <i class="<?php echo $iconPath ?>"></i>
+      <i class="<?= $iconPath ?>"></i>
     <?php endif ?>
-    <?php if ($data['Content']['alias_id']): ?>
+    <?php if ($content->alias_id): ?>
       <span class="alias"></span>
     <?php endif ?>
   </td>
   <td class="bca-table-listup__tbody-td" style="word-break: break-all;">
     <?php if ($isPublish): ?>
-      <?php $this->BcBaser->link(urldecode($fullUrl), $fullUrl, ['target' => '_blank']) ?><br>
+      <?php $this->BcBaser->link(rawurldecode($fullUrl), $fullUrl, ['target' => '_blank']) ?><br>
     <?php else: ?>
-      <?php echo urldecode($fullUrl); ?><br>
+      <?= rawurldecode($fullUrl); ?><br>
     <?php endif; ?>
-    <?php echo h($data['Content']['title']) ?>
+    <?= h($content->title) ?>
   </td>
   <td class="bca-table-listup__tbody-td" style="width:8%;text-align:center">
-    <?php echo $this->BcText->booleanMark($data['Content']['status']); ?>
+    <?= $this->BcText->booleanMark($content->status); ?>
   </td>
   <td class="bca-table-listup__tbody-td" style="width:8%;text-align:center">
-    <?php echo h($this->BcText->arrayValue($data['Content']['author_id'], $authors)); ?>
+    <?= h($this->BcText->arrayValue($content->author_id, $authorList)); ?>
   </td>
 
-  <?php echo $this->BcListTable->dispatchShowRow($data) ?>
+  <?= $this->BcListTable->dispatchShowRow($content) ?>
 
   <td class="bca-table-listup__tbody-td" style="width:8%;white-space: nowrap">
-    <?php echo $this->BcTime->format($data['Content']['created_date'], 'yyyy-MM-dd') ?><br/>
-    <?php echo $this->BcTime->format($data['Content']['modified_date'], 'yyyy-MM-dd') ?>
+    <?= $this->BcTime->format($content->created_date, 'yyyy-MM-dd') ?><br/>
+    <?= $this->BcTime->format($content->modified_date, 'yyyy-MM-dd') ?>
   </td>
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
+
+    <!-- 確認 -->
     <?php if ($isPublish): ?>
-      <?php $this->BcBaser->link('', $fullUrl, ['title' => __d('baser', '確認'), 'class' => 'btn-check bca-btn-icon', 'data-bca-btn-type' => 'preview', 'data-bca-btn-size' => 'lg', 'target' => '_blank']) ?>
+      <?php $this->BcBaser->link('',
+        $fullUrl, [
+          'title' => __d('baser', '確認'),
+          'class' => 'btn-check bca-btn-icon',
+          'data-bca-btn-type' => 'preview',
+          'data-bca-btn-size' => 'lg',
+          'target' => '_blank'
+        ]) ?>
     <?php else: ?>
-      <a title="管理" class="btn bca-btn-icon" data-bca-btn-type="preview" data-bca-btn-size="lg"
-         data-bca-btn-status="gray"></a>
+      <a title="確認"
+         class="btn bca-btn-icon"
+         data-bca-btn-type="preview"
+         data-bca-btn-size="lg"
+         data-bca-btn-status="gray">
+      </a>
     <?php endif ?>
-    <?php if (!$manageDisabled && !empty($this->BcContents->settings[$type]['routes']['manage'])): ?>
-      <?php $this->BcBaser->link('', array_merge($this->BcContents->settings[$type]['routes']['manage'], $urlParams), ['title' => __d('baser', '管理'), 'class' => 'btn-check bca-btn-icon', 'data-bca-btn-type' => 'th-list', 'data-bca-btn-size' => 'lg']) ?>
+
+    <!-- 管理 -->
+    <?php if (!$manageDisabled && !empty($items[$type]['routes']['manage'])): ?>
+      <?php $this->BcBaser->link('',
+        array_merge($items[$type]['routes']['manage'], $urlParams), [
+          'title' => __d('baser', '管理'),
+          'class' => 'btn-check bca-btn-icon',
+          'data-bca-btn-type' => 'th-list',
+          'data-bca-btn-size' => 'lg'
+        ]) ?>
     <?php else: ?>
-      <a title="管理" class="btn bca-btn-icon" data-bca-btn-type="th-list" data-bca-btn-size="lg"
-         data-bca-btn-status="gray"></a>
+      <a title="管理"
+         class="btn bca-btn-icon"
+         data-bca-btn-type="th-list"
+         data-bca-btn-size="lg"
+         data-bca-btn-status="gray">
+      </a>
     <?php endif ?>
+
+    <!-- 公開・非公開 -->
     <?php if (!$isSiteRoot && !$isSiteRelated && !$editDisabled): ?>
-      <?php $this->BcBaser->link('', ['action' => 'ajax_change_status'], ['title' => __d('baser', '非公開'), 'class' => 'btn-unpublish bca-btn-icon', 'data-bca-btn-type' => 'unpublish', 'data-bca-btn-size' => 'lg']) ?>
-      <?php $this->BcBaser->link('', ['action' => 'ajax_change_status'], ['title' => __d('baser', '公開'), 'class' => 'btn-publish bca-btn-icon', 'data-bca-btn-type' => 'publish', 'data-bca-btn-size' => 'lg']) ?>
+      <?php $this->BcBaser->link('',
+        ['prefix' => 'Api', 'action' => 'change_status', '_ext' => 'json'], [
+          'title' => __d('baser', '非公開'),
+          'class' => 'btn-unpublish bca-btn-icon',
+          'data-bca-btn-type' => 'unpublish',
+          'data-bca-btn-size' => 'lg'
+        ]) ?>
+      <?php $this->BcBaser->link('',
+        ['prefix' => 'Api', 'action' => 'change_status', '_ext' => 'json'], [
+          'title' => __d('baser', '公開'),
+          'class' => 'btn-publish bca-btn-icon',
+          'data-bca-btn-type' => 'publish',
+          'data-bca-btn-size' => 'lg'
+        ]) ?>
     <?php else: ?>
-      <a title="非公開" class="btn bca-btn-icon" data-bca-btn-type="unpublish" data-bca-btn-size="lg"
-         data-bca-btn-status="gray"></a>
+      <a title="非公開"
+         class="btn bca-btn-icon"
+         data-bca-btn-type="unpublish"
+         data-bca-btn-size="lg"
+         data-bca-btn-status="gray">
+      </a>
     <?php endif ?>
-    <?php if (!$editDisabled && $type != 'ContentFolder' && !empty($this->BcContents->settings[$type]['routes']['copy'])): ?>
-      <?php $this->BcBaser->link('', array_merge($this->BcContents->settings[$type]['routes']['copy'], $urlParams), ['title' => __d('baser', 'コピー'), 'class' => 'btn-copy bca-btn-icon', 'data-bca-btn-type' => 'copy', 'data-bca-btn-size' => 'lg']) ?>
+
+    <!-- コピー -->
+    <?php if (!$editDisabled && $type != 'ContentFolder' && !empty($items[$type]['routes']['copy'])): ?>
+      <?php $this->BcBaser->link('',
+        array_merge($items[$type]['routes']['copy'], $urlParams, ['_ext' => 'json']), [
+          'title' => __d('baser', 'コピー'),
+          'class' => 'btn-copy bca-btn-icon',
+          'data-bca-btn-type' => 'copy',
+          'data-bca-btn-size' => 'lg'
+        ]) ?>
     <?php else: ?>
-      <a title="コピー" class="bca-btn-icon" data-bca-btn-type="copy" data-bca-btn-size="lg"
-         data-bca-btn-status="gray"></a>
+      <a title="コピー"
+         class="bca-btn-icon"
+         data-bca-btn-type="copy"
+         data-bca-btn-size="lg"
+         data-bca-btn-status="gray">
+      </a>
     <?php endif ?>
+
+    <!-- 編集 -->
     <?php if (!$editDisabled): ?>
-      <?php $this->BcBaser->link('', array_merge($this->BcContents->settings[$type]['routes']['edit'], $urlParams), ['title' => __d('baser', '編集'), 'class' => 'btn-edit bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
+      <?php $this->BcBaser->link('',
+        array_merge($items[$type]['routes']['edit'], $urlParams), [
+          'title' => __d('baser', '編集'),
+          'class' => 'btn-edit bca-btn-icon',
+          'data-bca-btn-type' => 'edit',
+          'data-bca-btn-size' => 'lg'
+        ]) ?>
     <?php endif ?>
+
+    <!-- 削除 -->
     <?php if (!$editDisabled && !$isSiteRoot): ?>
-      <?php $this->BcBaser->link('', ['action' => 'ajax_delete', $data['Content']['id']], ['title' => __d('baser', '削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
+      <?php $this->BcBaser->link('',
+        ['prefix' => 'Api', 'action' => 'delete', $content->id, '_ext' => 'json'], [
+          'title' => __d('baser', '削除'),
+          'class' => 'btn-delete bca-btn-icon',
+          'data-bca-btn-type' => 'delete',
+          'data-bca-btn-size' => 'lg',
+          'data-confirm-message' => __d('baser', '{0} を本当に削除してもいいですか？', $content->title)
+        ]) ?>
     <?php endif ?>
+
     <form>
-      <input type="hidden" name="data[contentId]" value="<?php echo $data['Content']['id'] ?>">
-      <input type="hidden" name="data[type]" value="<?php echo $data['Content']['type'] ?>">
-      <input type="hidden" name="data[entityId]" value="<?php echo $data['Content']['entity_id'] ?>">
-      <input type="hidden" name="data[parentId]" value="<?php echo $data['Content']['parent_id'] ?>">
-      <input type="hidden" name="data[title]" value="<?php echo h($data['Content']['title']) ?>">
-      <input type="hidden" name="data[siteId]" value="<?php echo $data['Content']['site_id'] ?>">
-      <input type="hidden" name="data[status]" value="<?php echo $toStatus ?>">
-      <input type="hidden" name="data[alias]" value="<?php echo (bool)$data['Content']['alias_id'] ?>">
+      <input type="hidden" name="id" value="<?= $content->id ?>">
+      <input type="hidden" name="type" value="<?= $content->type ?>">
+      <input type="hidden" name="entity_id" value="<?= $content->entity_id ?>">
+      <input type="hidden" name="parent_id" value="<?= $content->parent_id ?>">
+      <input type="hidden" name="title" value="<?= h($content->title) ?>">
+      <input type="hidden" name="site_id" value="<?= $content->site_id ?>">
+      <input type="hidden" name="status" value="<?= $toStatus ?>">
+      <input type="hidden" name="alias_id" value="<?= (bool)$content->alias_id ?>">
     </form>
+
   </td>
 </tr>
 

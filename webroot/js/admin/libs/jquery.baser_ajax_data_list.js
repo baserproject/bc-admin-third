@@ -236,7 +236,7 @@
                     if (data) {
                         $(config.dataList).html(data);
                         $.baserAjaxDataList.initList();
-                        // $.yuga.stripe();
+                        $.yuga.stripe();
                     } else {
                         $(config.alertBox).html(bcI18n.commonGetDataFailedMessage);
                         $(config.alertBox).fadeIn(500);
@@ -263,9 +263,9 @@
             $.bcToken.check(function () {
                 var form = $(config.searchBox + " form");
                 form.append($.bcToken.getHiddenToken());
-                var data = form.serialize();
+                var data = decodeURI(form.serialize());
                 return $.ajax({
-                    type: "POST",
+                    type: "GET",
                     url: $(config.searchBox + " form").attr('action'),
                     data: data,
                     dataType: "html",
@@ -285,7 +285,10 @@
                         }
                         $($.baserAjaxDataList).trigger('searchLoaded');
                     },
-                    error: function () {
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        // console.log(jqXHR.responseText.substr(0, 600));
+                        // console.log(textStatus);
+                        // console.log(errorThrown);
                         $.bcToken.key = null;
                         $(config.loader).hide();
                         $(config.alertBox).html(bcI18n.commonExecFailedMessage);

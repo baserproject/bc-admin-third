@@ -1,12 +1,12 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 use BaserCore\View\{AppView as AppViewAlias};
@@ -28,6 +28,13 @@ $this->BcAdmin->setHelp('users_form');
 
 <div class="submit section bca-actions">
   <div class="bca-actions__main">
+    <?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'),
+      ['admin' => true, 'controller' => 'users', 'action' => 'index'],
+      [
+        'class' => 'button bca-btn bca-actions__item',
+        'data-bca-btn-type' => 'back-to-list'
+      ]
+    ) ?>
     <?= $this->BcAdminForm->button(
       __d('baser', '保存'),
       ['div' => false,

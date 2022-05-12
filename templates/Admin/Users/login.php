@@ -1,12 +1,12 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 use BaserCore\View\AppView;
@@ -15,16 +15,20 @@ use BaserCore\View\AppView;
  * login
  * @var AppView $this
  */
-$this->BcAdmin->setTitle(__d('baser', 'ログイン'))
+$this->BcAdmin->setTitle(__d('baser', 'ログイン'));
+$this->BcBaser->js('admin/users/login.bundle', false);
 ?>
 
 
 <div id="Login" class="bca-login">
   <div id="LoginInner">
     <?php $this->BcBaser->flash() ?>
-    <h1
-      class="bca-login__title"><?php echo $this->BcBaser->getImg('admin/logo_large.png', ['alt' => $this->BcBaser->getContentsTitle(), 'class' => 'bca-login__logo']) ?></h1>
-    <div id="AlertMessage" class="message" hidden></div>
+
+    <div id="AlertMessage" class="message" hidden><?php echo __d('baser', 'Eメール、または、パスワードが間違っています。') ?></div>
+
+    <h1 class="bca-login__title">
+      <?php echo $this->BcBaser->getImg('admin/logo_large.png', ['alt' => $this->BcBaser->getContentsTitle(), 'class' => 'bca-login__logo']) ?>
+    </h1>
     <?= $this->BcAdminForm->create() ?>
     <div class="login-input bca-login-form-item">
       <?php echo $this->BcAdminForm->label('email', __d('baser', 'Eメール')) ?>

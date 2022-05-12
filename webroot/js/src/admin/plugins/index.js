@@ -1,11 +1,11 @@
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 $(function () {
@@ -14,7 +14,10 @@ $(function () {
      * マーケットのデータを取得
      */
     $.ajax({
-        url: $.baseUrl() + '/baser' + $.bcUtil.adminPrefix + '/baser-core/plugins/get_market_plugins',
+        url: $.bcUtil.apiBaseUrl + 'baser-core/plugins/get_market_plugins',
+        headers: {
+            "Authorization": $.bcJwt.accessToken,
+        },
         type: "GET",
         success: function (result) {
             $("#BaserMarket").html(result);

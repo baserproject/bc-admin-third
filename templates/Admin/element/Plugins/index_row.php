@@ -1,12 +1,12 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 /**
@@ -32,7 +32,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
 ?>
 
 
-<tr id="Row<?php echo $count ?>" <?php echo $class; ?>>
+<tr id="Row<?= h($count) ?>" <?= $class ?>>
   <td class="row-tools bca-table-listup__tbody-td" nowrap>
     <?php if ($this->BcBaser->isAdminUser()): ?>
       <?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . $plugin->id, [
@@ -67,8 +67,8 @@ $class = ' class="' . implode(' ', $classies) . '"';
     <?php endif ?>
   </td>
   <td class="bca-table-listup__tbody-td" style="width:10%;white-space: nowrap">
-    <?php echo $this->BcTime->format($plugin->created, 'YYYY-MM-dd') ?><br/>
-    <?php echo $this->BcTime->format($plugin->modified, 'YYYY-MM-dd') ?>
+    <?php echo $this->BcTime->format($plugin->created, 'yyyy-MM-dd') ?><br/>
+    <?php echo $this->BcTime->format($plugin->modified, 'yyyy-MM-dd') ?>
   </td>
   <td class="bca-table-listup__tbody-td">
     <?php if ($plugin->update): ?>
@@ -90,7 +90,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
       ]); ?>
     <?php endif; ?>
     <?php if ($plugin->status): ?>
-      <?= $this->BcForm->postLink(
+      <?= $this->BcAdminForm->postLink(
         '',
         ['action' => 'detach', $plugin->name],
         ['block' => true,
@@ -111,7 +111,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
         ]); ?>
     <?php endif ?>
     <?php if (!$plugin->status): ?>
-      <?= $this->BcForm->postLink(
+      <?= $this->BcAdminForm->postLink(
         '',
         ['action' => 'uninstall', $plugin->name],
         ['block' => true,

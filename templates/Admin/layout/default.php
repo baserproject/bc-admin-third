@@ -1,19 +1,19 @@
-<?
+<?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 use BaserCore\Utility\BcUtil;
-use BaserCore\View\AppView;
-
+use BaserCore\View\BcAdminAppView;
+use Cake\Utility\Inflector;
 /**
- * @var AppView $this
+ * @var BcAdminAppView $this
  * @var string $title
  */
 
@@ -33,7 +33,8 @@ $base = $attributes['base'];
     'vendor/bootstrap-4.1.3/bootstrap',
     'vendor/jquery-ui/jquery-ui.min',
     'vendor/jquery.timepicker',
-    'admin/style',
+    'vendor/jquery-colorbox/colorbox',
+    'admin/style'
   ]) ?>
   <?= $this->fetch('css') ?>
   <?= $this->BcBaser->declarationI18n() ?>
@@ -73,14 +74,23 @@ $base = $attributes['base'];
     'vendor/vue.min',
     'vendor/jquery-3.5.1.min',
     'vendor/jquery.bt.min',
-    'vendor/jquery-ui-1.11.4.min.js',
+    'vendor/jquery-ui-1.13.0.min',
     'vendor/i18n/ui.datepicker-ja',
+    'vendor/jquery.validate.1.19.3.min',
+    'vendor/jquery.validate_ja',
+    'vendor/jquery.form-2.94',
     'vendor/jquery.timepicker',
+    'vendor/bootstrap-4.1.3/bootstrap.bundle.min',
+    'admin/functions'
   ]) ?>
   <?php $this->BcBaser->js('admin/common.bundle', true, [
     'id' => 'AdminScript',
     'data-baseUrl' => h($base),
-    'data-adminPrefix' => BcUtil::getAdminPrefix()
+    'data-adminPrefix' => BcUtil::getAdminPrefix(),
+    'data-baserCorePrefix' => Inflector::underscore(BcUtil::getBaserCorePrefix()),
+    'data-ajaxLoaderPath' => $this->Html->Url->image('admin/ajax-loader.gif'),
+    'data-ajaxLoaderSmallPath' => $this->Html->Url->image('admin/ajax-loader-s.gif'),
+    'data-frontFullUrl' => (!empty($publishLink))? h($publishLink) : '',
   ]) ?>
   <?php $this->BcBaser->js([
     'admin/startup.bundle'
@@ -115,7 +125,7 @@ $base = $attributes['base'];
 
         <div class="bca-main__header">
 
-          <h1 class="bca-main__header-title"><? $this->BcAdmin->title() ?></h1>
+          <h1 class="bca-main__header-title"><?php $this->BcAdmin->title() ?></h1>
 
           <div class="bca-main__header-actions">
             <?php $this->BcBaser->element('main_body_header_links'); ?>

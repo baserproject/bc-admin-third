@@ -1,12 +1,12 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 use BaserCore\View\AppView;
@@ -22,13 +22,13 @@ if (empty($nums)) {
 if (!is_array($nums)) {
   $nums = [$nums];
 }
-if (!empty($this->request->getQuery('num'))) {
-  $currentNum = $this->request->getQuery('num');
+if (!empty($this->request->getQuery('limit'))) {
+  $currentNum = $this->request->getQuery('limit');
 }
 $links = [];
 foreach($nums as $num) {
   if ($currentNum != $num) {
-    $links[] = '<span>' . $this->BcBaser->getLink($num, ['?' => array_merge($this->request->getQuery(), ['num' => $num, 'page' => null])]) . '</span>';
+    $links[] = '<span>' . $this->BcBaser->getLink($num, ['?' => array_merge($this->request->getQuery(), ['limit' => $num, 'page' => null])]) . '</span>';
   } else {
     $links[] = '<span class="current">' . $num . '</span>';
   }

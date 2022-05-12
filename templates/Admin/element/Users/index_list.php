@@ -1,12 +1,12 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 use BaserCore\View\AppView;
@@ -20,8 +20,11 @@ use BaserCore\View\AppView;
 $this->BcListTable->setColumnNumber(7);
 ?>
 
-
-<?php $this->BcBaser->element('pagination') ?>
+<div class="bca-data-list__top">
+  <div class="bca-data-list__sub">
+    <?php $this->BcBaser->element('pagination') ?>
+  </div>
+</div>
 
 <table class="list-table bca-table-listup" id="ListTable">
   <thead class="bca-table-listup__thead">
@@ -101,4 +104,9 @@ $this->BcListTable->setColumnNumber(7);
   </tbody>
 </table>
 
-<?php $this->BcBaser->element('list_num') ?>
+<div class="bca-data-list__bottom">
+  <div class="bca-data-list__sub">
+    <?php $this->BcBaser->element('pagination') ?>
+    <?php $this->BcBaser->element('list_num') ?>
+  </div>
+</div>

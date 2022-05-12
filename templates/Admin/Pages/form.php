@@ -1,21 +1,22 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 2.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
-
+use BaserCore\Utility\BcUtil;
+use BaserCore\View\BcAdminAppView;
 /**
  * [ADMIN] ページ登録・編集フォーム
- * @var BcAppView $this
+ * @var BcAdminAppView $this
  */
 $this->BcBaser->css('admin/ckeditor/editor', ['inline' => true]);
-$this->BcBaser->js('admin/pages/edit', false);
+$this->BcAdmin->setTitle(__d('baser', '固定ページ情報編集'));
+$this->BcAdmin->setHelp('pages_form');
 ?>
 
 
@@ -23,23 +24,23 @@ $this->BcBaser->js('admin/pages/edit', false);
   <div id="Action"><?php echo $this->request->action ?></div>
 </div>
 
-<?php echo $this->BcAdminForm->create('Page') ?>
-<?php echo $this->BcAdminForm->control('Page.mode', ['type' => 'hidden']) ?>
-<?php echo $this->BcAdminForm->control('Page.id', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->create($page, ['novalidate' => true]) ?>
+<?php echo $this->BcAdminForm->control('Pages.mode', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control('Pages.id', ['type' => 'hidden']) ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
-
 <div class="bca-section bca-section-editor-area">
-  <?php echo $this->BcForm->editor('Page.contents', array_merge([
-    'editor' => @$siteConfig['editor'],
+  <?php echo $this->BcAdminForm->editor('Pages.contents', array_merge([
+    'editor' => $editor,
     'editorUseDraft' => true,
     'editorDraftField' => 'draft',
     'editorWidth' => 'auto',
     'editorHeight' => '480px',
-    'editorEnterBr' => @$siteConfig['editor_enter_br']
-  ], $editorOptions)); ?>
-  <?php echo $this->BcForm->error('Page.contents') ?>
-  <?php echo $this->BcForm->error('Page.draft') ?>
+    'editorEnterBr' => $editor_enter_br
+  ], $editorOptions));
+  ?>
+  <?php echo $this->BcAdminForm->error('Pages.contents') ?>
+  <?php echo $this->BcAdminForm->error('Pages.draft') ?>
 </div>
 
 <?php if (BcUtil::isAdminUser()): ?>
@@ -54,40 +55,23 @@ $this->BcBaser->js('admin/pages/edit', false);
       <table class="form-table bca-form-table" data-bca-table-type="type2">
         <tr>
           <th
-            class="bca-form-table__label"><?php echo $this->BcForm->label('Page.page_template', __d('baser', '固定ページテンプレート')) ?></th>
+            class="bca-form-table__label"><?php echo $this->BcAdminForm->label('Pages.page_template', __d('baser', '固定ページテンプレート')) ?></th>
           <td class="col-input bca-form-table__input">
-            <?php echo $this->BcAdminForm->control('Page.page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
+            <?php echo $this->BcAdminForm->control('Pages.page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
             <div
-              class="helptext"><?php echo __d('baser', 'テーマフォルダ内の、Pages/templates テンプレートを配置する事で、ここでテンプレートを選択できます。') ?></div>
-            <?php echo $this->BcForm->error('Page.page_template') ?>
+              class="helptext"><?php echo __d('baser', 'テーマフォルダ内の、templates/Pages テンプレートを配置する事で、ここでテンプレートを選択できます。') ?></div>
+            <?php echo $this->BcAdminForm->error('Pages.page_template') ?>
           </td>
         </tr>
-        <tr>
-          <th class="bca-form-table__label"><?php echo $this->BcForm->label('Page.code', __d('baser', 'コード')) ?></th>
-          <td class="col-input bca-form-table__input">
-            <?php echo $this->BcAdminForm->control('Page.code', [
-              'type' => 'textarea',
-              'cols' => 36,
-              'rows' => 5,
-              'style' => 'font-size:14px;font-family:Verdana,Arial,sans-serif;'
-            ]); ?>
-            <i class="bca-icon--question-circle btn help bca-help"></i>
-            <div
-              class="helptext"><?php echo __d('baser', '固定ページの本文には、ソースコードに切り替えてPHPやJavascriptのコードを埋め込む事ができますが、ユーザーが間違って削除してしまわないようにこちらに入力しておく事もできます。<br>入力したコードは、自動的にコンテンツ本体の上部に差し込みます。') ?></div>
-            <?php echo $this->BcForm->error('Page.code') ?>
-          </td>
-        </tr>
-        <?php echo $this->BcForm->dispatchAfterForm() ?>
+        <?php echo $this->BcAdminForm->dispatchAfterForm() ?>
       </table>
     </div>
   </section>
-<?php else: ?>
-  <?php echo $this->BcAdminForm->control('Page.code', ['type' => 'hidden']) ?>
 <?php endif ?>
 
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
-<?php echo $this->BcForm->submit(__d('baser', '保存'), [
+<?php echo $this->BcAdminForm->submit(__d('baser', '保存'), [
   'div' => false,
   'class' => 'button bca-btn',
   'data-bca-btn-type' => 'save',

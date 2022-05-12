@@ -1,23 +1,28 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) NPO baser foundation
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       https://basercms.net/license/index.html MIT License
  */
+
+use BaserCore\Model\Entity\Content;
+use Cake\ORM\Query;
+use BaserCore\Utility\BcUtil;
 
 /**
  * 関連コンテンツ
  * @var string $mainSiteDisplayName メインサイト表示名称
  * @var array $relatedContents 関連コンテンツ
- * @var array $sites サイトリスト
+ * @var Query $sites サイトリスト
  * @var int $currentSiteId 現在のサイトID
+ * @var Content $content
  */
-$pureUrl = $this->BcContents->getPureUrl($this->request->getData('Content.url'), $this->request->getData('Site.id'));
+$sites = isset($sites)? $sites->toArray() : [];
+$pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
 ?>
 
 
@@ -48,7 +53,7 @@ $pureUrl = $this->BcContents->getPureUrl($this->request->getData('Content.url'),
         $current = false;
         if (!empty($relatedContent['Content'])) {
           if (!$relatedContent['Content']['alias_id']) {
-            $editUrl = $this->BcContents->settings[$relatedContent['Content']['type']]['url']['edit'];
+            $editUrl = $this->BcContents->getConfig('items')[$relatedContent['Content']['type']]['url']['edit'];
             if ($relatedContent['Content']['entity_id']) {
               $editUrl .= '/' . $relatedContent['Content']['entity_id'];
             }
@@ -56,21 +61,22 @@ $pureUrl = $this->BcContents->getPureUrl($this->request->getData('Content.url'),
           } else {
             $editUrl = '/' . BcUtil::getAdminPrefix() . '/contents/edit_alias/' . $relatedContent['Content']['id'] . '#RelatedContentsSetting';
           }
-          if ($this->request->getData('Content.id') == $relatedContent['Content']['id']) {
+          if ($this->request->getData($entityName . 'id') == $relatedContent['Content']['id']) {
             $current = true;
             $class = ' class="bca-currentrow"';
           }
         } else {
           $class = ' class="bca-disablerow"';
         }
+
         $prefix = $relatedContent['Site']['name'];
-        if ($relatedContent['Site']['alias']) {
-          $prefix = $relatedContent['Site']['alias'];
-        }
-        $targetUrl = '/' . $prefix . $pureUrl;
+				if ($relatedContent['Site']['alias']) {
+					$prefix = $relatedContent['Site']['alias'];
+				}
+				$targetUrl = '/' . $prefix . $pureUrl;
         $mainSiteId = $relatedContent['Site']['main_site_id'];
         if ($mainSiteId === '') {
-          $mainSiteId = 0;
+          $mainSiteId = 1;
         }
         ?>
         <tr<?php echo $class ?> id="Row<?php echo $relatedContent['Site']['id'] ?>">
@@ -82,7 +88,7 @@ $pureUrl = $this->BcContents->getPureUrl($this->request->getData('Content.url'),
             <?php if (!empty($relatedContent['Content'])): ?>
               <?php echo h($relatedContent['Content']['title']) ?>
               <?php if (!empty($relatedContent['Content'])): ?>
-                <small>（<?php echo h($this->BcContents->settings[$relatedContent['Content']['type']]['title']) ?>
+                <small>（<?php echo h($this->BcContents->getConfig('items')[$relatedContent['Content']['type']]['title']) ?>
                   ）</small>
               <?php endif ?>
             <?php else: ?>
@@ -99,13 +105,13 @@ $pureUrl = $this->BcContents->getPureUrl($this->request->getData('Content.url'),
               <?php if (!empty($relatedContent['Content'])): ?>
                 <?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_check.png', ['alt' => __d('baser', '確認')]), $relatedContent['Content']['url'], ['title' => __d('baser', '確認'), 'target' => '_blank']) ?>
                 <?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['alt' => __d('baser', '編集')]), $editUrl, ['title' => __d('baser', '編集')]) ?>
-              <?php elseif ($currentSiteId == $mainSiteId && $this->BcForm->value('Content.type') !== 'ContentFolder'): ?>
+              <?php elseif ($currentSiteId == $mainSiteId && $this->BcAdminForm->getSourceValue($entityName . "type") !== 'ContentFolder'): ?>
                 <?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_alias.png', ['alt' => __d('baser', 'エイリアス作成')]) . '<span class="icon-add-layerd"></span>', 'javascript:void(0)', ['class' => 'create-alias', 'title' => __d('baser', 'エイリアス作成'), 'target' => '_blank', 'data-site-id' => $relatedContent['Site']['id']]) ?>
                 <?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', ['alt' => __d('baser', 'コピー作成')]) . '<span class="icon-add-layerd"></span>', 'javascript:void(0)', ['class' => 'create-copy', 'title' => __d('baser', 'コピー作成'), 'target' => '_blank', 'data-site-id' => $relatedContent['Site']['id']]) ?>
               <?php endif ?>
             <?php endif ?>
-            <?php echo $this->BcAdminForm->control('Site.display_name' . $relatedContent['Site']['id'], ['type' => 'hidden', 'value' => $relatedContent['Site']['display_name']]) ?>
-            <?php echo $this->BcAdminForm->control('Site.target_url' . $relatedContent['Site']['id'], ['type' => 'hidden', 'value' => $targetUrl]) ?>
+            <?php echo $this->BcAdminForm->control('Sites.display_name' . $relatedContent['Site']['id'], ['type' => 'hidden', 'value' => $relatedContent['Site']['display_name']]) ?>
+            <?php echo $this->BcAdminForm->control('Sites.target_url' . $relatedContent['Site']['id'], ['type' => 'hidden', 'value' => $targetUrl]) ?>
           </td>
         </tr>
       <?php endforeach ?>

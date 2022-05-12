@@ -10,20 +10,37 @@
  * @license         https://basercms.net/license/index.html
  */
 
+use BaserCore\View\BcAdminAppView;
+
 /**
  * コンテンツ一覧 テーブル
  *
- * @var BcAppView $this
+ * @var BcAdminAppView $this
+ * @var array $contents
  */
-
 $this->BcListTable->setColumnNumber(8);
+$this->BcBaser->js('admin/contents/index_table.bundle');
 ?>
+
 
 <div class="bca-data-list__top">
   <?php if ($this->BcBaser->isAdminUser()): ?>
     <div class="bca-action-table-listup">
-      <?php echo $this->BcAdminForm->control('ListTool.batch', ['type' => 'select', 'options' => ['del' => __d('baser', '削除'), 'publish' => __d('baser', '公開'), 'unpublish' => __d('baser', '非公開')], 'empty' => __d('baser', '一括処理')]) ?>
-      <?php echo $this->BcForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn']) ?>
+      <?php echo $this->BcAdminForm->control('ListTool.batch', [
+        'type' => 'select',
+        'options' => [
+          'publish' => __d('baser', '公開'),
+          'unpublish' => __d('baser', '非公開'),
+          'delete' => __d('baser', '削除'),
+        ],
+        'empty' => __d('baser', '一括処理')
+      ]) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), [
+        'id' => 'BtnApplyBatch',
+        'disabled' => 'disabled',
+        'class' => 'bca-btn',
+        'data-bca-btn-size' => 'lg'
+      ]) ?>
     </div>
   <?php endif ?>
   <div class="bca-data-list__sub">
@@ -35,7 +52,7 @@ $this->BcListTable->setColumnNumber(8);
 <table class="list-table bca-table-listup sort-table" id="ListTable">
   <thead class="bca-table-listup__thead">
   <tr>
-    <th class="list-tool bca-table-listup__thead-th  bca-table-listup__thead-th--select"><?php // 一括選択 ?>
+    <th class="list-tool bca-table-listup__thead-th  bca-table-listup__thead-th--select">
       <?php echo $this->BcAdminForm->control('ListTool.checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
     </th>
     <th class="bca-table-listup__thead-th">
@@ -92,17 +109,22 @@ $this->BcListTable->setColumnNumber(8);
     </th>
   </tr>
   </thead>
+
   <tbody>
-  <?php if (!empty($datas)): ?>
+  <?php if (!empty($contents)): ?>
     <?php $count = 0; ?>
-    <?php foreach($datas as $data): ?>
-      <?php $this->BcBaser->element('contents/index_row_table', ['data' => $data, 'count' => $count]) ?>
+    <?php foreach($contents as $content): ?>
+      <?php $this->BcBaser->element('Contents/index_row_table', [
+        'content' => $content,
+        'count' => $count
+      ]) ?>
       <?php $count++; ?>
     <?php endforeach; ?>
   <?php else: ?>
     <tr>
-      <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p
-          class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p></td>
+      <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>">
+        <p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p>
+      </td>
     </tr>
   <?php endif; ?>
   </tbody>
@@ -110,6 +132,7 @@ $this->BcListTable->setColumnNumber(8);
 
 <div class="bca-data-list__bottom">
   <div class="bca-data-list__sub">
+    <?php $this->BcBaser->element('pagination') ?>
     <?php $this->BcBaser->element('list_num') ?>
   </div>
 </div>

@@ -1,11 +1,11 @@
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ * Copyright (c) NPO baser foundation <https://baserfoundation.org/>
  *
- * @copyright     Copyright (c) baserCMS User Community
+ * @copyright     Copyright (c) NPO baser foundation
  * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * @license       https://basercms.net/license/index.html MIT License
  */
 
 $(function () {
@@ -58,6 +58,11 @@ $(function () {
     }
 
     /**
+     * カラーボックス
+     */
+    if ($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox({maxWidth: '60%'});
+
+    /**
      * ヘルプ
      */
     $('#BtnMenuHelp').click(function () {
@@ -80,11 +85,77 @@ $(function () {
      * bcToken 初期化
      */
     $.bcToken.init();
+
+    /**
+     * bcJwt 初期化
+     */
+    $.bcJwt.init();
+
+    /**
+     * collapse　オプション、詳細設定の折りたたみ開閉
+     */
+    $("[data-bca-collapse='collapse']").on({
+        'click': function () {
+            const target = $(this).attr('data-bca-target');
+            // data-bca-state属性でtoggle
+            if ($(target).attr('data-bca-state') == 'open') {
+                // 対象ID要素:非表示
+                $(target).attr('data-bca-state', '').slideUp();
+                // ボタンの制御
+                $(this).attr('data-bca-state', '').attr('aria-expanded', 'true');
+            } else {
+                // 対象ID要素:表示
+                $(target).attr('data-bca-state', 'open').slideDown();
+                // ボタンの制御
+                $(this).attr('data-bca-state', 'open').attr('aria-expanded', 'false');
+            }
+            return false;
+        }
+    });
+
     /**
      * Cake\View\Helper\FormHelper
      * @method error()
      * `error`, `errorList` and `errorItem` templatesのclassをjsで変更する
      */
     $(".error-message:has(ul)").removeClass("error-message").addClass("error-wrap");
+
+    /**
+     * クリップボードにURLをコピーする
+     *
+     * @returns false
+     */
+    let fullUrl = $.bcUtil.frontFullUrl;
+    if (!document.queryCommandSupported('copy')) {
+        $("#BtnCopyUrl").hide();
+    } else if (fullUrl) {
+        // URLコピー： クリック後にツールチップの表示内容を切替え
+        $("#BtnCopyUrl").on({
+            'click': function () {
+                var copyArea = $("<textarea style=\" opacity:0; width:1px; height:1px; margin:0; padding:0; border-style: none;\"/>");
+                copyArea.text(fullUrl);
+                $(this).after(copyArea);
+                copyArea.select();
+                document.execCommand("copy");
+                copyArea.remove();
+
+                // コピー完了のツールチップ表示 bootstrap tooltip
+                $("#BtnCopyUrl").tooltip('dispose'); // 一度削除
+                $("#BtnCopyUrl").tooltip({title: 'コピーしました'});
+                $("#BtnCopyUrl").tooltip('show');
+                return false;
+            },
+            'mouseenter': function () {
+                // console.log('マウス ホバー');
+                $("#BtnCopyUrl").tooltip('dispose'); // 一度削除
+                $("#BtnCopyUrl").tooltip({title: '公開URLをコピー'});
+                $("#BtnCopyUrl").tooltip('show');
+            },
+            'mouseleave': function () {
+                // console.log('マウス アウト');
+                $("#BtnCopyUrl").tooltip('hide');
+            }
+        });
+    }
 });
 
