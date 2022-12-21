@@ -18,6 +18,7 @@ use BaserCore\Annotation\Checked;
  * @var BcAdminAppView $this
  * @var array $dblogs
  * @checked
+ * @unitTest
  * @noTodo
  */
 ?>
@@ -35,7 +36,7 @@ use BaserCore\Annotation\Checked;
             <small>
               <?php echo $this->BcTime->format($dblog->created, 'HH:mm:ss') ?>&nbsp;
               <?php if ($dblog->user): ?>
-                <?php echo '[' . h($dblog->user->name) . ']' ?>
+                <?php echo '[' . h($dblog->user->getDisplayName()) . ']' ?>
               <?php endif ?>
             </small><br/>
             <?php echo nl2br(h($dblog->message)) ?>

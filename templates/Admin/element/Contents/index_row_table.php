@@ -20,8 +20,10 @@ use BaserCore\View\BcAdminAppView;
  * @var array $authorList
  * @var Content $content
  * @var int $count
+ * @checked
+ * @noTodo
+ * @unitTest
  */
-
 $isSiteRelated = $this->BcContents->isSiteRelated($content);
 $isPublish = $this->BcContents->isAllowPublish($content, true);
 $isSiteRoot = $content->site_root;
@@ -68,7 +70,7 @@ if ($content->self_status) {
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--select">
     <?php if ($this->BcBaser->isAdminUser() && empty($content->site_root)): ?>
       <?php echo $this->BcAdminForm->control(
-        'ListTool.batch_targets.' . $content->id, [
+        'batch_targets.' . $content->id, [
         'type' => 'checkbox',
         'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>',
         'class' => 'batch-targets bca-checkbox__input',
