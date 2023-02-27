@@ -54,8 +54,8 @@ export default {
      * モーダルを閉じる
      */
     closeModal: function () {
-      this.showModal = false;
       this.$emit('modal-closed');
+      this.showModal = false;
     }
   }
 };
