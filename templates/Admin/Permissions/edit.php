@@ -16,13 +16,14 @@ use BaserCore\Model\Entity\Permission;
  * Permissions Add
  * @var AppViewAlias $this
  * @var Permission $permission
- * @var array $currentUserGroup
+ * @var int $userGroupId
+ * @var string $userGroupTitle
  * @checked
  * @noTodo
  * @unitTest
  */
 $this->BcAdmin->setHelp('permissions_form');
-$this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜アクセスルール編集'), $currentUserGroup->title));
+$this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜アクセスルール編集'), $userGroupTitle));
 ?>
 
 
@@ -33,25 +34,25 @@ $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜アクセスルール編集'
 <div class="submit section bca-actions">
   <div class="bca-actions__main">
     <?php if ($this->getRequest()->getParam('pass.2')): ?>
-      <?php echo $this->BcHtml->link(__d('baser', 'アクセスグループ編集に戻る'), [
+      <?php $this->BcBaser->link(__d('baser_core', 'アクセスグループ編集に戻る'), [
         'controller' => 'PermissionGroups',
         'action' => 'edit',
-        $currentUserGroup->id,
+        $userGroupId,
         $this->getRequest()->getParam('pass.2')
       ], [
         'class' => 'button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'back-to-list'
       ]) ?>
     <?php endif ?>
-    <?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'), [
+    <?php $this->BcBaser->link(__d('baser_core', '一覧に戻る'), [
       'action' => 'index',
-      $currentUserGroup->id
+      $userGroupId
     ], [
       'class' => 'button bca-btn bca-actions__item',
       'data-bca-btn-type' => 'back-to-list'
     ]) ?>
     <?= $this->BcAdminForm->button(
-      __d('baser', '保存'),
+      __d('baser_core', '保存'),
       ['div' => false,
         'class' => 'button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'save',
@@ -60,6 +61,20 @@ $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜アクセスルール編集'
         'id' => 'BtnSave']
     ) ?>
   </div>
+  <div class="bca-actions__sub">
+      <?= $this->BcAdminForm->postLink(
+        __d('baser_core', '削除'),
+        ['action' => 'delete', $permission->id],
+        ['block' => true,
+          'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $permission->name),
+          'class' => 'bca-submit-token button bca-btn bca-actions__item',
+          'data-bca-btn-type' => 'delete',
+          'data-bca-btn-size' => 'sm'
+        ]
+      ) ?>
+  </div>
 </div>
 
 <?= $this->BcAdminForm->end() ?>
+
+<?= $this->fetch('postLink') ?>

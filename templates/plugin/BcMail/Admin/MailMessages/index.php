@@ -14,8 +14,7 @@
  * @var \BcMail\View\MailAdminAppView $this
  * @var \BcMail\Model\Entity\MailContent $mailContent
  */
-$this->BcAdmin->setTitle(__d(
-  'baser',
+$this->BcAdmin->setTitle(__d('baser_core',
   '{0}｜受信メール一覧',
   $this->getRequest()->getAttribute('currentContent')->title
 ));
@@ -25,7 +24,7 @@ $this->BcAdmin->setHelp('mail_messages_index');
 <div class="panel-box bca-panel-box" id="FunctionBox">
   <?php echo $this->BcAdminForm->create(null, [
     'type' => 'get',
-    'url' => ['controller' => 'MailFields', 'action' => 'download_csv', $mailContent->id]
+    'url' => ['controller' => 'MailMessages', 'action' => 'download_csv', $mailContent->id]
   ]) ?>
   <?php echo $this->BcAdminForm->control('encoding', [
     'type' => 'radio',
@@ -33,7 +32,7 @@ $this->BcAdmin->setHelp('mail_messages_index');
     'value' => 'UTF-8'
   ]) ?>
   &nbsp;&nbsp;
-  <?php echo $this->BcAdminForm->submit(__d('baser', 'CSVダウンロード'), ['div' => false, 'class' => 'bca-btn']) ?>
+  <?php echo $this->BcAdminForm->submit(__d('baser_core', 'CSVダウンロード'), ['div' => false, 'class' => 'bca-btn']) ?>
   <?php echo $this->BcAdminForm->end() ?>
 </div>
 
