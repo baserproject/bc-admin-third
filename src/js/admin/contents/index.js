@@ -36,25 +36,21 @@ $(function () {
                 break;
             case "2":
                 // 一括処理
-                $.bcBatch.init({batchUrl: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/batch.json'});
+                $.bcBatch.init({batchUrl: $.bcUtil.apiAdminBaseUrl + 'baser-core' + '/contents/batch.json'});
                 grpChangeTreeOpenClose.hide();
                 break;
         }
 
-        // 検索ボックス
-        let searchBox = $("#Search");
-        let contentsIndexSearchOpened = $("#SearchBoxOpened").html();
-        if (contentsIndexSearchOpened) {
-            searchBox.show();
-        } else {
-            searchBox.hide();
-        }
+        $("#BtnSearchSubmit").click(function (){
+            $("#list-type").val(2);
+            return true;
+        });
 
         // サイトが変わった場合は検索ボックスをリセット
         if (e !== undefined && e.target.id === 'viewsetting-site-id') {
             $("#BtnSearchClear").click();
             $.ajax({
-                url: $.bcUtil.apiBaseUrl + 'baser-core/contents/get_content_folder_list/' + $(this).val(),
+                url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/get_content_folder_list/' + $(this).val(),
                 headers: {
                     "Authorization": $.bcJwt.accessToken,
                 },
@@ -107,8 +103,9 @@ $(function () {
      * 表形式のリストをロードする
      */
     function loadTable() {
-        let url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/index?list_type=2';
-        location.href = url + '&' + decodeURI($("#ContentIndexForm").serialize());
+        let url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/index?';
+        $("#list-type").val(2);
+        location.href = url + decodeURI($("#ContentIndexForm").serialize());
     }
 
     /**

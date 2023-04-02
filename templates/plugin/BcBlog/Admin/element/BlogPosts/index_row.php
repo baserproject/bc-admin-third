@@ -5,7 +5,6 @@
  *
  * @copyright       Copyright (c) baserCMS Users Community
  * @link            https://basercms.net baserCMS Project
- * @package            Blog.View
  * @since           baserCMS v 0.1.0
  * @license         https://basercms.net/license/index.html
  */
@@ -109,8 +108,8 @@ use Cake\Utility\Hash;
       ['action' => 'publish', $post->blog_content->id, $post->id],
       [
         'title' => __d('baser_core', '公開'),
-        'class' => 'btn-unpublish bca-btn-icon',
-        'data-bca-btn-type' => 'unpublish',
+        'class' => 'btn-publish bca-btn-icon',
+        'data-bca-btn-type' => 'publish',
         'data-bca-btn-size' => 'lg']
     ) ?>
     <?php endif ?>
