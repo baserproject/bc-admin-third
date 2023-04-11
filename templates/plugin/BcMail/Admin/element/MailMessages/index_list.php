@@ -49,8 +49,8 @@ $this->BcBaser->js('BcMail.admin/mail_messages/index.bundle', false, [
 <table class="list-table sort-table bca-table-listup" id="ListTable">
   <thead class="bca-table-listup__thead">
   <tr>
-    <th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select"><?php // 一括選択 ?>
-      <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser_core', '一括選択')]) ?>
+    <th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select" title="<?php echo __d('baser_core', '一括選択') ?>">
+      <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => ' ', 'title' => __d('baser_core', '一括選択')]) ?>
     </th>
     <th class="bca-table-listup__thead-th" style="white-space: nowrap"><?php // id ?>
       <?php echo $this->Paginator->sort('id', [
@@ -66,8 +66,8 @@ $this->BcBaser->js('BcMail.admin/mail_messages/index.bundle', false, [
         ], ['escape' => false, 'class' => 'btn-direction bca-table-listup__a'
       ]) ?>
     </th>
-    <th class="bca-table-listup__thead-th" style="white-space: nowrap">受信内容</th>
-    <th class="bca-table-listup__thead-th" style="white-space: nowrap">添付</th>
+    <th class="bca-table-listup__thead-th" style="white-space: nowrap"><?php echo __d('baser_core', '受信内容') ?></th>
+    <th class="bca-table-listup__thead-th" style="white-space: nowrap"><?php echo __d('baser_core', '添付') ?></th>
     <?php echo $this->BcListTable->dispatchShowHead() ?>
     <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'アクション') ?></th>
   </tr>

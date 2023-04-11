@@ -39,8 +39,6 @@ $this->BcListTable->setColumnNumber(6);
     </div>
   <?php endif ?>
   <div class="bca-data-list__sub">
-    <!-- list-num -->
-    <?php $this->BcBaser->element('list_num') ?>
     <!-- pagination -->
     <?php $this->BcBaser->element('pagination') ?>
   </div>
@@ -50,8 +48,8 @@ $this->BcListTable->setColumnNumber(6);
 <table class="list-table bca-table-listup" id="ListTable">
   <thead class="bca-table-listup__thead">
   <tr class="">
-    <th class="list-tool bca-table-listup__thead-th  bca-table-listup__thead-th--select">
-      <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser_core', '一括選択')]) ?>
+    <th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select" title="<?php echo __d('baser_core', '一括選択') ?>">
+      <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => ' ', 'title' => __d('baser_core', '一括選択')]) ?>
     </th>
     <th class="bca-table-listup__thead-th">No</th>
     <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'ウィジェットエリア名') ?></th>
@@ -81,3 +79,12 @@ $this->BcListTable->setColumnNumber(6);
   <?php endif; ?>
   </tbody>
 </table>
+
+<div class="bca-data-list__bottom">
+	<div class="bca-data-list__sub">
+		<!-- pagination -->
+		<?php $this->BcBaser->element('pagination') ?>
+		<!-- list-num -->
+		<?php $this->BcBaser->element('list_num') ?>
+	</div>
+</div>

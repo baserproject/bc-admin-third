@@ -30,16 +30,18 @@ $this->BcListTable->setColumnNumber(9);
       <?php echo $this->BcAdminForm->button(__d('baser_core', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn']) ?>
     </div>
   <?php endif ?>
-  <!-- pagination -->
-  <?php $this->BcBaser->element('pagination') ?>
+  <div class="bca-data-list__sub">
+    <!-- pagination -->
+    <?php $this->BcBaser->element('pagination') ?>
+  </div>
 </div>
 
 <!-- list -->
 <table class="list-table sort-table bca-table-listup" id="ListTable">
   <thead class="bca-table-listup__thead">
   <tr>
-    <th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select">
-      <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => __d('baser_core', '一括選択')]) ?>
+    <th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select" title="<?php echo __d('baser_core', '一括選択') ?>">
+      <?php echo $this->BcAdminForm->control('checkall', ['type' => 'checkbox', 'label' => ' ', 'title' => __d('baser_core', '一括選択')]) ?>
     </th>
     <th class="bca-table-listup__thead-th">No</th>
     <th class="bca-table-listup__thead-th"><?php echo __d('baser_core', 'タイプ') ?><br><?php echo __d('baser_core', 'タイトル') ?>
@@ -70,5 +72,11 @@ $this->BcListTable->setColumnNumber(9);
   </tbody>
 </table>
 
-<!-- list-num -->
-<?php $this->BcBaser->element('list_num') ?>
+<div class="bca-data-list__bottom">
+	<div class="bca-data-list__sub">
+		<!-- pagination -->
+		<?php $this->BcBaser->element('pagination') ?>
+		<!-- list-num -->
+		<?php $this->BcBaser->element('list_num') ?>
+	</div>
+</div>
