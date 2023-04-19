@@ -43,6 +43,7 @@ let vm = new Vue({
             sourceMultiCheckbox: [],
             sourceRadio: [],
             sourceSelect: [],
+            displayPreview: true
         }
     },
 
@@ -125,6 +126,8 @@ let vm = new Vue({
          * 表示を初期化する
          */
         initView() {
+            // テンプレート内のツールチップがリセットされてしまうため再度ヘルプのツールチップを設定
+            $.bcUtil.initTooltip();
             if(!this.entity.validate) {
                 this.entity.validate = [];
             }
@@ -137,11 +140,20 @@ let vm = new Vue({
                 if (bottom <= $(window).scrollTop()) {
                     $preview.fadeOut(500);
                 } else {
-                    if ($preview.css('display') === 'none') {
+                    if (vm.displayPreview && $preview.css('display') === 'none') {
                         $preview.fadeIn(500);
                     }
                 }
             });
+            $preview.show();
+        },
+
+        /**
+         * プレビューを非表示にする
+         */
+        hidePreview() {
+            this.displayPreview = false;
+            $("#CustomFieldPreview").fadeOut(500);
         },
 
         /**

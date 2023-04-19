@@ -25,6 +25,7 @@ $this->BcBaser->js('BcCustomContent.admin/custom_fields/form.bundle', false, [
   'data-setting' => json_encode($fieldTypes),
   'data-entity' => json_encode($entity)
 ]);
+$this->BcAdmin->setHelp('custom_fields_form');
 ?>
 
 
@@ -320,9 +321,9 @@ $this->BcBaser->js('BcCustomContent.admin/custom_fields/form.bundle', false, [
 
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
-<div id="CustomFieldPreview">
+<div id="CustomFieldPreview" hidden>
   <div class="custom-field-preview-inner">
-  <span class="preview-icon">PREVIEW</span>
+  <span class="preview-icon" @click="hidePreview">PREVIEW</span>
   <?php foreach($fieldTypes as $key => $type): ?>
     <?php if($key === 'group' || $type['controlType'] === 'hidden') continue ?>
     <span v-show="showPreview['<?php echo $key ?>']">
