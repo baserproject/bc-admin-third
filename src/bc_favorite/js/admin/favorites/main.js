@@ -12,7 +12,6 @@ import Vue from 'vue/dist/vue.js'
 import FavoriteIndex from "./index.vue";
 import Vuelidate from 'vuelidate'
 
-
 /**
  * よく使う項目の処理を行う
  */
