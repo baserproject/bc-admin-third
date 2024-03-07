@@ -11,39 +11,28 @@
 /**
  * コンテンツ一覧（テーブル）
  */
-const contentsIndexTable = {
+
+$(function () {
+
+    initList();
 
     /**
-     * mounted
+     * 一覧を初期化
      */
-    mounted() {
-        this.initView();
-        this.registerEvents();
-    },
-
-    /**
-     * 表示初期化
-     */
-    initView() {
+    function initList() {
+        $('.btn-copy, .btn-delete, .btn-publish, .btn-unpublish').click(actionClickHandler);
         // 公開・非公開ボタンの表示設定
         $("#ListTable tbody tr .btn-publish").hide();
         $("#ListTable tbody tr.unpublish .btn-publish").show();
         $("#ListTable tbody tr .btn-unpublish").hide();
         $("#ListTable tbody tr.publish .btn-unpublish").show();
-    },
-
-    /**
-     * イベント登録
-     */
-    registerEvents() {
-        $('.btn-copy, .btn-delete, .btn-publish, .btn-unpublish').click(this.actionClickHandler);
-    },
+    }
 
     /**
      * アクションボタンクリック時イベント
      * @returns {boolean}
      */
-    actionClickHandler() {
+    function actionClickHandler() {
         const $target = $(this);
         if ($target.attr('data-confirm-message') && !confirm($target.attr('data-confirm-message'))) {
             return false;
@@ -62,7 +51,6 @@ const contentsIndexTable = {
                     $.bcUtil.showLoader();
                 }
             }).done(function () {
-                $.bcUtil.showNoticeMessage(bcI18n.commonExecCompletedMessage);
                 location.reload();
             }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
                 $.bcUtil.showAjaxError(bcI18n.commonExecFailedMessage, XMLHttpRequest, errorThrown);
@@ -73,6 +61,4 @@ const contentsIndexTable = {
         return false;
     }
 
-}
-
-contentsIndexTable.mounted();
+});
