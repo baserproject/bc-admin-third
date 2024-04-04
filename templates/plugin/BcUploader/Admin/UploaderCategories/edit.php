@@ -43,7 +43,7 @@ $this->BcAdmin->setTitle(__d('baser_core', 'アップロードカテゴリ編集
   <div class="bca-actions__main">
     <?php echo $this->BcAdminForm->button(__d('baser_core', '保存'), [
       'div' => false,
-      'class' => 'bca-loading bca-btn bca-actions__item',
+      'class' => 'button bca-btn bca-actions__item',
       'data-bca-btn-type' =>
       'save', 'data-bca-btn-size' =>
       'lg', 'data-bca-btn-width' => 'lg'
