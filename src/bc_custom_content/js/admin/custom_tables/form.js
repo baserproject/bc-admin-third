@@ -179,6 +179,14 @@ let customLinks = new Vue({
     methods: {
 
         /**
+         * テーブルを保存する
+         * 保存ボタン部分が Vue.js で制御されていないため、ここで制御
+         */
+        saveTable: function () {
+            $.bcUtil.showLoader();
+        },
+
+        /**
          * 関連リンク詳細を開く
          *
          * @param index
@@ -456,6 +464,11 @@ $(function () {
                 $(`#${inUseFieldId} input[name='template[display_front]']`).attr('name', `custom_links[new-${baseId}][display_front]`);
                 $(`#${inUseFieldId} input[name='template[use_api]']`).attr('name', `custom_links[new-${baseId}][use_api]`);
                 $(`#${inUseFieldId} input[name='template[status]']`).attr('name', `custom_links[new-${baseId}][status]`);
+
+                const $nameInput = $(`#${inUseFieldId} input[name='custom_links[new-${baseId}][name]']`);
+                if($nameInput.val() === 'group') {
+                    $nameInput.val('group_field');
+                }
 
                 registerEventToInUseField(inUseFieldId);
                 updateSort();
