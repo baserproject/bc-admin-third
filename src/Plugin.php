@@ -15,6 +15,6 @@ use BaserCore\BcPlugin;
 /**
  * Class Plugin
  */
-class BcAdminThirdPlugin extends BcPlugin
+class Plugin extends BcPlugin
 {
 }
