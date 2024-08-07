@@ -79,10 +79,9 @@ $this->BcAdmin->setHelp('theme_files_form');
       array_merge(['action' => 'delete', $theme, $plugin, $type], $params), [
         'block' => true,
         'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', basename($path)),
-        'class' => 'bca-btn',
+        'class' => 'bca-submit-token button bca-btn',
         'data-bca-btn-type' => 'delete',
-        'data-bca-btn-size' => 'sm',
-        'data-bca-btn-color' => "danger"
+        'data-bca-btn-size' => 'sm'
       ]) ?>
   </div>
   <?php endif ?>
