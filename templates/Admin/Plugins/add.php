@@ -11,7 +11,6 @@
 
 /**
  * @var \BaserCore\View\BcAdminAppView $this
- * @var bool $isPluginsDirWritable
  * @checked
  * @noTodo
  * @unitTest
@@ -33,8 +32,7 @@ $this->BcBaser->js('admin/plugins/add.bundle', false);
     'id' => 'BtnSave',
     'class' => 'button bca-btn',
     'div' => false,
-    'data-bca-btn-status' => 'primary',
-    'disabled' => !$isPluginsDirWritable,
+    'data-bca-btn-status' => 'primary'
   ]) ?>
 </div>
 
