@@ -96,13 +96,11 @@ $this->BcBaser->js([
         </div>
       <?php endif ?>
 			<?php
-			if(method_exists($this, 'dispatchLayerEvent')) {
-        // EVENT leftOfToolbar
-        $event = $this->dispatchLayerEvent('leftOfToolbar', [], ['layer' => 'View', 'class' => '', 'plugin' => '']);
-        if ($event !== false) {
-          echo ($event->getResult() === null || $event->getResult() === true)? '' : $event->getResult();
-        }
-      }
+			// EVENT leftOfToolbar
+			$event = $this->dispatchLayerEvent('leftOfToolbar', [], ['layer' => 'View', 'class' => '', 'plugin' => '']);
+			if ($event !== false) {
+				echo ($event->getResult() === null || $event->getResult() === true)? '' : $event->getResult();
+			}
 		 	?>
       <?php if ($this->BcToolbar->isAvailableMode()): ?>
         <div class="bca-toolbar__tools-mode">
@@ -117,12 +115,10 @@ $this->BcBaser->js([
       <div id="UserMenu" class="bca-toolbar__users">
         <ul class="clearfix">
           <?php
-          if(method_exists($this, 'dispatchLayerEvent')) {
-            // EVENT rightOfToolbar
-            $event = $this->dispatchLayerEvent('rightOfToolbar', [], ['layer' => 'View', 'class' => '', 'plugin' => '']);
-            if ($event !== false) {
-              echo ($event->getResult() === null || $event->getResult() === true)? '' : $event->getResult();
-            }
+          // EVENT rightOfToolbar
+          $event = $this->dispatchLayerEvent('rightOfToolbar', [], ['layer' => 'View', 'class' => '', 'plugin' => '']);
+          if ($event !== false) {
+            echo ($event->getResult() === null || $event->getResult() === true)? '' : $event->getResult();
           }
           ?>
           <li>
@@ -146,13 +142,11 @@ $this->BcBaser->js([
                 <li><?php $this->BcBaser->link(__d('baser_core', 'アカウント設定'), $this->BcToolbar->getAccountSettingUrl()) ?></li>
               <?php endif ?>
 							<?php
-							if(method_exists($this, 'dispatchLayerEvent')) {
-                // EVENT userMenuOfToolbar
-                $event = $this->dispatchLayerEvent('userMenuOfToolbar', [], ['layer' => 'View', 'class' => '', 'plugin' => '']);
-                if ($event !== false) {
-                  echo ($event->getResult() === null || $event->getResult() === true)? '' : $event->getResult();
-                }
-              }
+							// EVENT userMenuOfToolbar
+							$event = $this->dispatchLayerEvent('userMenuOfToolbar', [], ['layer' => 'View', 'class' => '', 'plugin' => '']);
+							if ($event !== false) {
+								echo ($event->getResult() === null || $event->getResult() === true)? '' : $event->getResult();
+							}
 							?>
               <li><?php $this->BcBaser->link(__d('baser_core', 'ログアウト'), $this->BcToolbar->getLogoutUrl(), ['id' => 'BtnLogout']) ?></li>
             </ul>
