@@ -109,7 +109,7 @@ $base = $attributes['base'];
 
 <div id="Page" class="bca-app">
 
-  <?php $this->BcBaser->header() ?>
+  <?php $this->BcBaser->element('header') ?>
 
   <div id="Wrap" class="bca-container">
 
@@ -148,7 +148,7 @@ $base = $attributes['base'];
         </div>
 
         <div class="bca-main__contents clearfix">
-          <?php $this->BcBaser->content() ?>
+          <?= $this->fetch('content') ?>
         </div>
 
         <!-- / bca-main__body --></article>
@@ -157,7 +157,7 @@ $base = $attributes['base'];
 
     <!-- / #Wrap --></div>
 
-  <?php $this->BcBaser->footer() ?>
+  <?php $this->BcBaser->element('footer') ?>
 
   <!-- / #Page --></div>
 

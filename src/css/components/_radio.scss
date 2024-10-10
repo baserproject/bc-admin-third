@@ -76,10 +76,6 @@
       box-shadow: 0 0 0 4px #fff inset;
     }
 
-    &.form-error:checked + label:before {
-      background: $color_danger;
-    }
-
     &:disabled + label:before {
       background: #ddd;
     }
@@ -92,11 +88,6 @@
       box-shadow: 0 0 0 4px #fff inset, $focus_shadow;
       border-color: $color_primary;
       border-width: 1px;
-    }
-
-    &.form-error:focus + label:before {
-      box-shadow: 0 0 0 4px #fff inset, $focus_shadow_error;
-      border-color: $color_danger;
     }
   }
 
