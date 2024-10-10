@@ -179,6 +179,9 @@ $(function () {
         $.bcToken.check(function () {
             const widgetAreaId = $("#AdminWidgetAreasScript").attr('data-widgetAreaId');
             return $.ajax({
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
                 url: `${$.bcUtil.apiAdminBaseUrl}bc-widget-area/widget_areas/delete_widget/${widgetAreaId}/${id}.json`,
                 type: 'POST',
                 data: {
@@ -221,6 +224,9 @@ $(function () {
         });
         $.bcToken.check(function () {
             return $.ajax({
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
                 url: `${$.bcUtil.apiAdminBaseUrl}bc-widget-area/widget_areas/update_sort/${widgetAreaId}.json`,
                 type: 'POST',
                 data: {
@@ -256,6 +262,9 @@ $(function () {
         $.bcToken.check(function () {
             $('#WidgetAreaUpdateTitleForm input[name="_csrfToken"]').val($.bcToken.key);
             return $.ajax({
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
                 url: `${$.bcUtil.apiAdminBaseUrl}bc-widget-area/widget_areas/update_title/${widgetAreaId}.json`,
                 type: 'POST',
                 data: $("#WidgetAreaUpdateTitleForm").serialize(),
@@ -293,6 +302,9 @@ $(function () {
         $.bcToken.check(function () {
             $("#" + formId + ' input[name="_csrfToken"]').val($.bcToken.key);
             return $.ajax({
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
                 url: $.bcUtil.apiAdminBaseUrl + 'bc-widget-area/widget_areas/update_widget/' + widgetAreaId + '.json',
                 type: 'POST',
                 data: $form.serialize(),

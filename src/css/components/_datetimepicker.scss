@@ -90,10 +90,6 @@
     }
   }
 
-  &:has(.form-error) input {
-    border: 1px solid $color_danger;
-  }
-
   &__date {
     &-label {
       @include bca-icon(datetimepicker-date);

@@ -120,6 +120,9 @@ const favoriteList = {
             };
             return $.ajax({
                 url: $.bcUtil.apiAdminBaseUrl + 'bc-favorite/favorites/change_sort.json',
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
                 type: 'POST',
                 data: data,
                 dataType: 'text',

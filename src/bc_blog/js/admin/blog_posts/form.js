@@ -100,6 +100,9 @@ $(function () {
             return $.ajax({
                 type: "POST",
                 url: $.bcUtil.apiAdminBaseUrl + 'bc-blog/blog_tags/add.json',
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
                 data: {
                     'name': $("#blog-tag-name").val(),
                     '_csrfToken': $.bcToken.key
@@ -192,6 +195,9 @@ $(function () {
             return $.ajax({
                 type: "post",
                 url: $.bcUtil.apiAdminBaseUrl + 'bc-blog/blog_categories.json',
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
                 data: {
                     'blog_content_id': blogContentId,
                     'name': name,
