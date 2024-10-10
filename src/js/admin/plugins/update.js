@@ -7,7 +7,6 @@
  * @since         5.0.0
  * @license       https://basercms.net/license/index.html MIT License
  */
-import axios from "axios";
 
 const updateForm = {
 
@@ -22,18 +21,12 @@ const updateForm = {
     isWritablePackage: false,
 
     /**
-     * アップデートできるかどうか
-     */
-    isUpdatable: false,
-
-    /**
      * 起動処理
      */
     mounted() {
         const script = $("#AdminPluginsUpdateScript");
         this.plugin = script.attr('data-plugin');
-        this.isUpdatable = script.attr('data-isUpdatable');
-        if(this.isUpdatable === undefined) this.isUpdatable = false;
+        this.isWritablePackage = script.attr('data-isWritablePackage');
         this.registerEvents();
         this.toggleUpdate();
     },
@@ -43,14 +36,11 @@ const updateForm = {
      */
     registerEvents() {
         $("#BtnUpdate").on('click', this.update);
-        $("#BtnDownload").on('click', $.bcUtil.showLoader);
         $("#php").on('change', this.toggleUpdate);
     },
 
     /**
      * アップデート実行
-     * コアのアップデートの場合、ダウンロードした最新版のファイルを適用してからリクエストを送信する
-     * マイグレーションファイルがプログラムに反映されないと実行できないため、別プロセスとして実行する
      * @returns {boolean}
      */
     update() {
@@ -66,35 +56,17 @@ const updateForm = {
      */
     toggleUpdate() {
         const $btnUpdate = $("#BtnUpdate");
-        const $btnDownload = $("#BtnDownload");
         const $phpNotice = $(".php-notice");
-        const $inputPhp = $("#php");
-
-        if (updateForm.plugin === 'BaserCore') {
-            if ($inputPhp.val() !== ''){
-                if(updateForm.isUpdatable) {
-                    $btnUpdate.removeAttr('disabled');
-                } else {
-                    $btnUpdate.attr('disabled', 'disabled');
-                }
-                $btnDownload.removeAttr('disabled');
-            } else {
-                $btnUpdate.attr('disabled', 'disabled');
-                $btnDownload.attr('disabled', 'disabled');
-            }
-            if ($inputPhp.val()) {
-                $phpNotice.hide();
-            } else {
-                $phpNotice.show();
-            }
+        if(updateForm.plugin !== 'BaserCore') return;
+        if($("#php").val()) {
+            $btnUpdate.removeAttr('disabled');
+            $phpNotice.hide();
         } else {
-            if (updateForm.isUpdatable) {
-                $btnUpdate.removeAttr('disabled');
-                $btnDownload.removeAttr('disabled');
-            } else {
-                $btnUpdate.attr('disabled', 'disabled');
-                $btnDownload.attr('disabled', 'disabled');
-            }
+            $btnUpdate.attr('disabled', 'disabled');
+            $phpNotice.show();
+        }
+        if(!updateForm.isWritablePackage) {
+            $btnUpdate.attr('disabled', 'disabled');
         }
     }
 

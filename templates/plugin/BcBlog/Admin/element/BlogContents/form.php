@@ -111,7 +111,7 @@ use Cake\Routing\Router;
             <ul>
               <li><?php echo __d('baser_core', 'RSSフィードに出力する件数を指定します。') ?></li>
               <li><?php echo __d('baser_core', '半角数字で入力してください。') ?></li>
-              <?php if ($this->getRequest()->getParam('action') === 'edit'): ?>
+              <?php if ($this->getRequest()->getParam('action') === 'admin_edit'): ?>
                 <li><?php echo __d('baser_core', 'RSSフィードのURL') ?>&nbsp;
                   <?php $this->BcBaser->link(Router::url('/' . $this->BcAdminForm->getSourceValue('Content.name') . '/index.rss', true), '/' . $this->BcAdminForm->getSourceValue('Content.name') . '/index.rss', ['target' => '_blank']) ?>
                 </li>
@@ -185,15 +185,7 @@ use Cake\Routing\Router;
             <?php echo __d('baser_core', 'ブログコンテンツで利用するウィジェットエリアを指定します。') ?><br>
             <?php echo __d('baser_core', 'ウィジェットエリアはウィジェットエリア管理より追加できます。') ?><br>
             <ul>
-              <li>
-                <?php $this->BcBaser->link(__d('baser_core', 'ウィジェットエリア管理'), [
-                  'prefix' => 'Admin',
-                  'plugin' => 'BcWidgetArea',
-                  'controller' =>
-                  'WidgetAreas',
-                  'action' => 'index'
-                ]) ?>
-              </li>
+              <li><?php //$this->BcBaser->link(__d('baser_core', 'ウィジェットエリア管理'), ['plugin' => null, 'controller' => 'widget_areas', 'action' => 'index']) ?></li>
             </ul>
           </div>
           <?php echo $this->BcAdminForm->error('widget_area') ?>
