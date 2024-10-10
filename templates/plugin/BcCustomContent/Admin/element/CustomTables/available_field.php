@@ -58,10 +58,6 @@ $this->BcAdminForm->unlockField('template');
       'type' => 'hidden',
       'value' => true
     ]) ?>
-    <?php echo $this->BcAdminForm->control('template.use_api', [
-      'type' => 'hidden',
-      'value' => true
-    ]) ?>
     <?php echo $this->BcAdminForm->control('template.status', [
       'type' => 'hidden',
       'value' => true

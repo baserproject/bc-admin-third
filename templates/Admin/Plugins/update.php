@@ -26,7 +26,6 @@ use BaserCore\View\BcAdminAppView;
  * @var string $log
  * @var bool $requireUpdate
  * @var string $php
- * @var bool $isWritablePackage
  */
 $this->BcAdmin->setTitle(sprintf(__d('baser_core', '%s｜データベースアップデート'), ($plugin->name === 'BaserCore')? __d('baser_core', 'baserCMSコア') : $plugin->title . __d('baser_core', 'プラグイン')));
 $this->BcBaser->i18nScript([
@@ -34,9 +33,7 @@ $this->BcBaser->i18nScript([
 ]);
 $this->BcBaser->js('admin/plugins/update.bundle', false, [
   'id' => 'AdminPluginsUpdateScript',
-  'defer' => true,
-  'data-plugin' => $plugin->name,
-  'data-isWritablePackage' => $isWritablePackage
+  'data-plugin' => $plugin->name
 ]);
 ?>
 
