@@ -14,8 +14,7 @@
  *
  * @var \BaserCore\View\BcAdminAppView $this
  * @var \BaserCore\Model\Entity\Plugin $plugin
- * @var string $installStatusMessage インストールができない場合のメッセージ
- * @var string $installMessage プラグインのインストールに関するメッセージ
+ * @var string $installStatusMessage
  */
 $this->BcBaser->i18nScript([
   'message1' => __d('baser_core', 'プラグインのデータを初期化します。よろしいですか？'),
@@ -33,10 +32,8 @@ $this->BcAdmin->setHelp('plugins_install');
 ?>
 
 
-<?php if ($installMessage || $installStatusMessage): ?>
-  <div id="UpdateMessage">
-    <?php echo ($installStatusMessage)?: $installMessage ?>
-  </div>
+<?php if ($installStatusMessage): ?>
+  <div id="UpdateMessage"><?php echo $installStatusMessage ?></div>
 <?php endif ?>
 
 <?php if (!$installStatusMessage): ?>

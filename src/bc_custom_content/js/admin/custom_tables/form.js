@@ -40,8 +40,7 @@ let customLinks = new Vue({
             enabledGroupValid: true,
             currentParentId: null,
             tableId: script.attr('data-tableId'),
-            displayPreview: true,
-            isAdd: script.attr('data-isAdd')
+            displayPreview: true
         }
     },
 
@@ -57,9 +56,7 @@ let customLinks = new Vue({
      */
     mounted: function () {
         // テンプレート内のツールチップがリセットされてしまうため再度ヘルプのツールチップを設定
-        if(!this.isAdd) {
-            $.bcUtil.initTooltip();
-        }
+        $.bcUtil.initTooltip();
     },
 
     /**

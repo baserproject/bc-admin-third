@@ -307,12 +307,7 @@ $(function () {
                     if (!result.widgetArea) {
                         $.bcUtil.showAlertMessage(bcI18n.alertMessage4);
                     } else {
-                        let name = $("#Setting" + id + ' .name').val().replace(/&/g, '&amp;')
-                            .replace(/"/g, '&quot;')
-                            .replace(/'/g, '&#039;')
-                            .replace(/</g, '&lt;')
-                            .replace(/>/g, '&gt;');
-                        $("#Setting" + id + ' .head').html(name);
+                        $("#Setting" + id + ' .head').html($("#Setting" + id + ' .name').val());
                         $.bcUtil.showNoticeMessage(bcI18n.infoMessage3);
                     }
                 },
