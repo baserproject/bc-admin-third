@@ -1004,6 +1004,7 @@
          */
         copyContent: function (parent, node) {
             var data = $.extend(true, {}, node.data.jstree);
+            data.contentTitle = bcI18n.bcTreeCopyTitle.sprintf(data.contentTitle);
             data.status = false;
             $.bcToken.check(function () {
                 return $.ajax({
@@ -1012,6 +1013,7 @@
                     data: {
                         content_id: data.contentId,
                         entity_id: data.contentEntityId,
+                        title: data.contentTitle,
                         parent_id: data.contentParentId,
                         site_id: data.contentSiteId,
                         _csrfToken: $.bcToken.key,

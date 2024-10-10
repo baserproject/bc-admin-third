@@ -27,26 +27,27 @@ if (!$this->Uploader->isPublish($uploaderFile)) {
   $classies = ['publish', 'selectable-file'];
   $statusPublish = true;
 }
+$class = ' class="' . implode(' ', $classies) . '"';
 ?>
 
 
-<tr class="<?= h(implode(' ', $classies)); ?>" id="selectedFile<?= h($uploaderFile->id) ?>">
+<tr<?php echo $class; ?> id="selectedFile<?php echo $uploaderFile->id ?>">
   <td class="id bca-table-listup__tbody-td">
-    <?= h($uploaderFile->id) ?>
+    <?php echo $uploaderFile->id ?>
     <div style="display:none">
-      <span class="small"><?= h($uploaderFile->small) ?></span>
-      <span class="midium"><?= h($uploaderFile->midium) ?></span>
-      <span class="large"><?= h($uploaderFile->large) ?></span>
+      <span class="small"><?php echo $uploaderFile->small ?></span>
+      <span class="midium"><?php echo $uploaderFile->midium ?></span>
+      <span class="large"><?php echo $uploaderFile->large ?></span>
       <span class="url">
-        <?= h($this->BcHtml->Url->build($this->Uploader->getFileUrl($uploaderFile->name))) ?>
+        <?php echo $this->BcHtml->Url->build($this->Uploader->getFileUrl($uploaderFile->name)) ?>
       </span>
-      <span class="user-id"><?= h($uploaderFile->user_id) ?></span>
-      <span class="name"><?= h($uploaderFile->name) ?></span>
-      <span class="alt"><?= h($uploaderFile->alt) ?></span>
+      <span class="user-id"><?php echo $uploaderFile->user_id ?></span>
+      <span class="name"><?php echo $uploaderFile->name ?></span>
+      <span class="alt"><?php echo h($uploaderFile->alt) ?></span>
     </div>
   </td>
   <td class="img bca-table-listup__tbody-td">
-    <?= $this->Uploader->file($uploaderFile, [
+    <?php echo $this->Uploader->file($uploaderFile, [
       'size' => 'small',
       'alt' => h($uploaderFile->alt),
       'style' => 'width:80px'
@@ -54,20 +55,20 @@ if (!$this->Uploader->isPublish($uploaderFile)) {
   </td>
   <td class="bca-table-listup__tbody-td">
     <span class="uploader-category-id">
-      <?= h($this->BcText->arrayValue($uploaderFile->uploader_category_id, $uploaderCategories)) ?>
+      <?php echo $this->BcText->arrayValue($uploaderFile->uploader_category_id, $uploaderCategories) ?>
     </span>
   </td>
   <td class="bca-table-listup__tbody-td">
-    <span><?= h($uploaderFile->name) ?></span>
+    <span><?php echo h($uploaderFile->name) ?></span>
     <?php if ($uploaderFile->alt): ?>
-    <br/><span><?= $this->BcText->truncate(h($uploaderFile->alt), 40) ?><span>
+    <br/><span><?php echo $this->BcText->truncate(h($uploaderFile->alt), 40) ?><span>
     <?php endif ?>
   </td>
   <td class="bc-align-center bca-table-listup__tbody-td">
-    <?= $this->BcText->booleanMark($statusPublish); ?>
+    <?php echo $this->BcText->booleanMark($statusPublish); ?>
   </td>
   <td class="user-name bca-table-listup__tbody-td">
-    <?= h($this->BcText->arrayValue($uploaderFile->user_id, $users)) ?>
+    <?php echo h($this->BcText->arrayValue($uploaderFile->user_id, $users)) ?>
   </td>
   <td class="created bca-table-listup__tbody-td">
     <span class="created"><?php echo $this->BcTime->format($uploaderFile->created, 'Y.m.d') ?></span><br/>

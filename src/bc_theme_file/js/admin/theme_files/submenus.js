@@ -8,11 +8,10 @@
  * @license       https://basercms.net/license/index.html MIT License
  */
 
-$(function () {
+$(function (){
     $('#ThemeFilesMenu').accordion({
         collapsible: true,
-        heightStyle: "content",
-        active: parseInt($('.selected-plugin').attr("data-id"))
+        heightStyle: "content"
     });
 });
 

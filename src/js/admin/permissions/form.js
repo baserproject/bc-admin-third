@@ -34,13 +34,7 @@ $(function () {
         let permissionGroups = JSON.parse($("#permission-group").val());
         permissionGroups.forEach(permissionGroup => {
             if (permissionGroup.type === type) {
-                name = permissionGroup.name
-                    .replace(/&/g, '&amp;')
-                    .replace(/"/g, '&quot;')
-                    .replace(/'/g, '&#039;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;');
-                $("#permission-group-id").append(`<option value="${permissionGroup.id}">${name}</option>`)
+                $("#permission-group-id").append(`<option value="${permissionGroup.id}">${permissionGroup.name}</option>`)
             }
         });
     }

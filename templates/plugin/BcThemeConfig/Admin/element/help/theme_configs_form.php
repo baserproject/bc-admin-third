@@ -11,9 +11,6 @@
 
 /**
  * [ADMIN] テーマ設定　ヘルプ
- * @checked
- * @noTodo
- * @unitTest
  */
 ?>
 
