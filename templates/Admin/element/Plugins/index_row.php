@@ -64,7 +64,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
   <td class="bca-table-listup__tbody-td" style="min-width:200px;"><?php echo h($plugin->description) ?></td>
   <td class="bca-table-listup__tbody-td">
     <?php if ($plugin->author): ?>
-      <?php if ($plugin->url): ?>
+      <?php if (!$plugin->url): ?>
         <?php echo h($plugin->author) ?>
       <?php else: ?>
         <?php $this->BcBaser->link($plugin->author, $plugin->url, ['target' => '_blank', 'escape' => true]) ?>
@@ -86,8 +86,8 @@ $class = ' class="' . implode(' ', $classies) . '"';
         'data-bca-btn-size' => 'lg'
       ]); ?>
     <?php endif ?>
-    <?php if ($plugin->admin_link && $plugin->status && !$plugin->update && !$plugin->old_version): ?>
-      <?php $this->BcBaser->link('', $plugin->admin_link, [
+    <?php if ($plugin->adminLink && $plugin->status && !$plugin->update && !$plugin->old_version): ?>
+      <?php $this->BcBaser->link('', $plugin->adminLink, [
         'aria-label' => __d('baser_core', 'このプラグインの設定を行う'),
         'title' => __d('baser_core', '管理'),
         'class' => 'btn-setting  bca-btn-icon',

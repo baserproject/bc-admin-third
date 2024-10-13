@@ -41,7 +41,8 @@ if (!isset($listId)) {
       'type' => 'select',
       'options' => $uploaderCategories,
       'empty' => __d('baser_core', '指定なし'),
-      'id' => 'FilterUploaderCategoryId' . $listId
+      'id' => 'FilterUploaderCategoryId' . $listId,
+      'style' => 'width:100%'
     ]) ?>
 	</span>
   <?php endif ?>
@@ -67,6 +68,9 @@ if (!isset($listId)) {
       <?php echo $this->BcAdminForm->button(__d('baser_core', '検索'), ['id' => 'BtnSearchSubmit', 'class' => 'bca-btn bca-loading', 'data-bca-btn-type' => 'search']) ?>
       <?php endif ?>
     </span>
+    <div class="bca-search__btns-item">
+      <?php echo $this->BcAdminForm->button(__d('baser_core', 'クリア'), ['id' => 'BtnSearchClear', 'class' => 'bca-btn', 'data-bca-btn-type' => 'clear']) ?>
+    </div>
 	</span>
 </div>
 <?php echo $this->Form->end() ?>

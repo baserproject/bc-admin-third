@@ -12,6 +12,7 @@
  * dialog
  * @checked
  * @noTodo
+ * @unitTest
  */
 $(function () {
 
@@ -60,9 +61,6 @@ $(function () {
                     $.bcToken.check(function () {
                         return $.ajax({
                             url: $.bcUtil.apiAdminBaseUrl + 'baser-core/permissions/add',
-                            headers: {
-                                "Authorization": $.bcJwt.accessToken,
-                            },
                             type: 'POST',
                             data: form.serialize(),
                             dataType: 'json',
@@ -74,7 +72,7 @@ $(function () {
                             $.bcUtil.showNoticeMessage(result.message);
                             $("#PermissionDialog").dialog('close');
                         }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                            $.bcUtil.showAjaxError(bcI18n.commonSaveFailedMessage, XMLHttpRequest, errorThrown);
+                            alert(bcI18n.commonSaveFailedMessage);
                         }).always(function(){
                             $.bcUtil.hideLoader();
                         });

@@ -26,16 +26,12 @@
 $this->BcAdmin->setTitle(__d('baser_core', 'システム基本設定'));
 $this->BcAdmin->setHelp('site_configs_form');
 $this->BcBaser->i18nScript([
-  'alertMessage1' => __d('baser_core', '管理システムをSSLに切り替える場合には、SSL用のURLを登録してください。'),
-  'alertMessage2' => __d('baser_core', 'テストメールを送信に失敗しました。'),
-  'confirmMessage1' => __d('baser_core', '管理システムをSSLに切り替えようとしています。よろしいですか？<br><br>サーバがSSLに対応していない場合、管理システムを表示する事ができなくなってしまいますのでご注意ください。<br><br>もし、表示する事ができなくなってしまった場合は、 /app/Config/install.php の、 BcEnv.sslUrl の値を調整するか、BcApp.adminSsl の値を false に書き換えて復旧してください。'),
-  'confirmMessage2' => __d('baser_core', 'テストメールを送信します。いいですか？'),
+  'alertMessage1' => __d('baser_core', 'テストメールの送信に失敗しました。'),
+  'confirmMessage1' => __d('baser_core', 'テストメールを送信します。よろしいですか？'),
   'infoMessage1' => __d('baser_core', 'テストメールを送信しました。'),
   'confirmTitle1' => __d('baser_core', '管理システムSSL設定確認')
 ], ['escape' => false]);
-$this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSiteConfigsFormScript',
-  'data-isAdminSsl' => (string)$siteConfig->admin_ssl
-]);
+$this->BcBaser->js('admin/site_configs/index.bundle', false);
 ?>
 
 
@@ -64,21 +60,11 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
         <input type="password" name="dummy-site_url" style="display: none">
         <?php $this->BcAdminForm->unlockFields('dummy-site_url') ?>
         <?php echo $this->BcAdminForm->control('site_url', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'data-margin' => 'bottom', 'disabled' => !$isWritableEnv]) ?>
-        <br>
-        <input type="password" name="dummy-ssl_url" style="display: none">
-        <?php $this->BcAdminForm->unlockFields('dummy-ssl_url') ?>
-        <?php echo $this->BcAdminForm->control('ssl_url', [
-            'type' => 'text',
-            'size' => 35,
-            'maxlength' => 255,
-            'disabled' => !$isWritableEnv]
-        ) ?> <small>[SSL]</small>
         <i class="bca-icon--question-circle bca-help"></i>
-        <?php echo $this->BcAdminForm->error('site_url') ?>
-        <?php echo $this->BcAdminForm->error('ssl_url') ?>
         <div class="bca-helptext">
-          <?php echo __d('baser_core', 'baserCMSを設置しているURLを指定します。管理画面等でSSL通信を利用する場合は、SSL通信で利用するURLも指定します。') ?>
+          <?php echo __d('baser_core', 'baserCMSを設置しているURLを指定します。') ?>
         </div>
+        <?php echo $this->BcAdminForm->error('site_url') ?>
       </td>
     </tr>
 
@@ -141,25 +127,6 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
     <table class="form-table bca-form-table section" data-bca-table-type="type2">
       <tr>
         <th class="col-head bca-form-table__label">
-          <?php echo $this->BcAdminForm->label('admin_ssl', __d('baser_core', '管理画面SSL設定')) ?>
-        </th>
-        <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('admin_ssl', [
-            'type' => 'radio',
-            'options' => $this->BcText->booleanDoList(__d('baser_core', 'SSL通信を利用')),
-            'separator' => '　',
-            'legend' => false,
-            'disabled' => !$isWritableEnv
-          ]) ?>
-          <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('admin_ssl') ?>
-          <div class="bca-helptext">
-            <?php echo __d('baser_core', '管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。<br>また、SSL用のWebサイトURLの指定が必要です。') ?>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('admin_list_num', __d('baser_core', '管理画面テーマ')) ?>
         </th>
         <td class="col-input bca-form-table__input">
@@ -214,7 +181,6 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
           <?php echo $this->BcAdminForm->error('admin_side_banner') ?>
         </td>
       </tr>
-
       <tr>
         <th class="col-head bca-form-table__label">
           <?php echo $this->BcAdminForm->label('use_update_notice', __d('baser_core', 'アップデート通知')) ?>
@@ -232,6 +198,74 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
       </tr>
 
       <?php echo $this->BcAdminForm->dispatchAfterForm('Admin') ?>
+
+    </table>
+  </div>
+</section>
+
+<section class="bca-section" data-bca-section-type='form-group'>
+  <div class="bca-collapse__action">
+    <button type="button" class="bca-collapse__btn" data-bca-collapse="collapse"
+            data-bca-target="#formSecuritySettingBody" aria-expanded="false"
+            aria-controls="formAdminSettingBody">
+      <?php echo __d('baser_core', 'セキュリティ') ?>&nbsp;&nbsp;
+      <i class="bca-icon--chevron-down bca-collapse__btn-icon"></i>
+    </button>
+  </div>
+  <div class="bca-collapse" id="formSecuritySettingBody" data-bca-state="">
+    <table class="form-table bca-form-table section" data-bca-table-type="type2">
+      <tr>
+        <th class="col-head bca-form-table__label">
+          <?php echo $this->BcAdminForm->label('allow_simple_password', __d('baser_core', '簡易なログインパスワード')) ?>
+        </th>
+        <td class="col-input bca-form-table__input">
+          <?php echo $this->BcAdminForm->control('allow_simple_password', [
+            'type' => 'checkbox',
+            'label' => __d('baser_core', 'ログインパスワードの複雑度のチェックを行わない')
+          ]) ?>
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext"><?php echo __d('baser_core', 'チェックが入っている場合、ユーザーがパスワードを設定する際の文字数と文字種の制限が緩和されます。') ?></div>
+          <?php echo $this->BcAdminForm->error('allow_simple_password') ?>
+        </td>
+      </tr>
+      <tr>
+        <th class="col-head bca-form-table__label">
+          <?php echo $this->BcAdminForm->label('password_reset_days', __d('baser_core', 'ログインパスワード強制変更<br>までの日数'), ['escape' => false]) ?>
+        </th>
+        <td class="col-input bca-form-table__input">
+
+          <?php echo $this->BcAdminForm->control('password_reset_days', [
+            'type' => 'text',
+            'size' => 10,
+            'maxlength' => 255
+          ]) ?>日
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext">
+            <?php echo __d(
+              'baser_core',
+              'ユーザーのパスワードが設定した日数以上更新されていない場合に強制的にパスワード再設定画面を表示します。' .
+              '再設定を行うまで管理画面の利用は不可となります。空欄の場合には強制変更は行われません。'
+            ) ?>
+          </div>
+          <?php echo $this->BcAdminForm->error('password_reset_days') ?>
+        </td>
+      </tr>
+      <tr>
+        <th class="col-head bca-form-table__label">
+          <?php echo $this->BcAdminForm->label('use_two_factor_authentication', __d('baser_core', '二段階認証')) ?>
+        </th>
+        <td class="col-input bca-form-table__input">
+          <?php echo $this->BcAdminForm->control('use_two_factor_authentication', [
+            'type' => 'checkbox',
+            'label' => __d('baser_core', '利用する')
+          ]) ?>
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext"><?php echo __d('baser_core', 'チェックが入っている場合、ログイン時にメールで送信される認証コードの入力が必要になります。') ?></div>
+          <?php echo $this->BcAdminForm->error('use_two_factor_authentication') ?>
+        </td>
+      </tr>
+
+      <?php echo $this->BcAdminForm->dispatchAfterForm('Security') ?>
 
     </table>
   </div>
@@ -444,7 +478,6 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
             'data-input-text-size' => 'full-counter'
           ]) ?>
           <i class="bca-icon--question-circle bca-help"></i>
-          <?php echo $this->BcAdminForm->error('editor_styles') ?>
           <div class="bca-helptext">
             <p><?php echo __d('baser_core', '固定ページなどで利用するエディタのスタイルセットをCSS形式で記述する事ができます。') ?></p>
             <pre># <?php echo __d('baser_core', 'タイトル') ?>
@@ -465,6 +498,7 @@ $this->BcBaser->js('admin/site_configs/index.bundle', false, ['id' => 'AdminSite
 h2 {}
 					</pre>
           </div>
+          <?php echo $this->BcAdminForm->error('editor_styles') ?>
         </td>
       </tr>
 

@@ -75,10 +75,10 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
               <?php
               $widgets = [];
               foreach($widgetInfo['paths'] as $path) {
-                $Folder = new \Cake\Filesystem\Folder($path);
-                $files = $Folder->read(true, true, true);
+                $Folder = new \BaserCore\Utility\BcFolder($path);
+                $files = $Folder->getFiles(['full' => true]);
                 $widgets = [];
-                foreach($files[1] as $file) {
+                foreach($files as $file) {
                   $widget = ['name' => '', 'title' => '', 'description' => '', 'setting' => ''];
                   ob_start();
                   $key = 'Widget';
@@ -169,6 +169,12 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
             if ($widget[$key]['status']) {
               $enabled = ' enabled';
             }
+
+            // baserCMS４系よりデータを移行した場合に、プラグインが設定されていないため、コアのテーマを設定
+            if(empty($widget[$key]['plugin'])) {
+              $widget[$key]['plugin'] = \Cake\Utility\Inflector::camelize(Cake\Core\Configure::read('BcApp.coreAdminTheme'), '-');
+            }
+
             $this->setRequest($this->getRequest()->withParsedBody(array_merge(
               $this->getRequest()->getData(),
               [$key => $widget[$key]]

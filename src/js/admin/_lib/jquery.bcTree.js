@@ -233,9 +233,6 @@
                     "force_text": true,
                     "check_callback": function (operation, node, node_parent, node_position, more) {
                         if (operation == 'move_node') {
-                            if (!$.bcTree.config.isUseMoveContents) {
-                                return false;
-                            }
                             if (node_parent.type == 'folder' && !node_parent.data.jstree.alias && !node.data.jstree.contentSiteRoot) {
                                 $.bcTree.dropTarget = node_parent;
                                 $.bcTree.dragTarget = node;
@@ -257,7 +254,17 @@
                     "types"
                 ],
                 "dnd": {
-                    "large_drop_target": true
+                    "large_drop_target": true,
+                    "is_draggable" : function (nodes) {
+                        if (!$.bcTree.config.isUseMoveContents) {
+                            return false;
+                        }
+                        // 最上位のコンテンツは移動不可
+                        if (nodes[0].parents.length <= 1) {
+                            return false;
+                        }
+                        return true;
+                    },
                 },
                 "types": {
                     "default": {},
@@ -326,9 +333,6 @@
                                             $.bcToken.check(function () {
                                                 return $.ajax({
                                                     url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/change_status.json',
-                                                    headers: {
-                                                        "Authorization": $.bcJwt.accessToken,
-                                                    },
                                                     type: 'PATCH',
                                                     data: {
                                                         id: data.contentId,
@@ -367,9 +371,6 @@
                                             $.bcToken.check(function () {
                                                 return $.ajax({
                                                     url: $.bcUtil.apiAdminBaseUrl + 'baser-core' + '/contents/change_status.json',
-                                                    headers: {
-                                                        "Authorization": $.bcJwt.accessToken,
-                                                    },
                                                     type: 'PATCH',
                                                     data: {
                                                         id: data.contentId,
@@ -504,9 +505,6 @@
                                         if (data.alias) {
                                             $.ajax({
                                                 url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/exists/' + data.contentAliasId + '.json',
-                                                headers: {
-                                                    "Authorization": $.bcJwt.accessToken,
-                                                },
                                                 type: 'GET',
                                                 dataType: 'json',
                                                 beforeSend: function () {
@@ -537,9 +535,6 @@
                                             $.bcToken.check(function () {
                                                 return $.ajax({
                                                     url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/trash_empty.json',
-                                                    headers: {
-                                                        "Authorization": $.bcJwt.accessToken,
-                                                    },
                                                     type: 'DELETE',
                                                     dataType: 'json',
                                                     data: {
@@ -889,9 +884,6 @@
                         };
                         return $.ajax({
                             url: url,
-                            headers: {
-                                "Authorization": $.bcJwt.accessToken,
-                            },
                             type: 'POST',
                             data: {
                                 _csrfToken: $.bcToken.key,
@@ -976,9 +968,6 @@
             $.bcToken.check(function () {
                 return $.ajax({
                     url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/delete/' + data.contentId + '.json',
-                    headers: {
-                        "Authorization": $.bcJwt.accessToken,
-                    },
                     type: 'POST',
                     data: {
                         id: data.contentId,
@@ -1022,14 +1011,10 @@
          */
         copyContent: function (parent, node) {
             var data = $.extend(true, {}, node.data.jstree);
-            data.contentTitle = bcI18n.bcTreeCopyTitle.sprintf(data.contentTitle);
             data.status = false;
             $.bcToken.check(function () {
                 return $.ajax({
                     url: $.bcTree.settings[data.contentType]['url']['copy'],
-                    headers: {
-                        "Authorization": $.bcJwt.accessToken,
-                    },
                     type: 'POST',
                     data: {
                         content_id: data.contentId,
@@ -1049,16 +1034,15 @@
                         $.bcTree.settings[data.contentType]['exists'] = true;
                         $.bcTree.settings[data.contentType]['existsTitle'] = data.contentTitle;
                         data.contentId = result.content.id;
+                        data.name = result.content.name;
                         data.contentEntityId = result.content.entity_id;
+                        data.contentTitle = result.content.title;
                         data.contentTitle = data.contentTitle.replace(/&/g, '&amp;')
                             .replace(/"/g, '&quot;')
                             .replace(/'/g, '&#039;')
                             .replace(/</g, '&lt;')
                             .replace(/>/g, '&gt;');
                         $.ajax($.bcUtil.apiAdminBaseUrl + 'baser-core/contents/get_full_url/' + data.contentId + '.json', {
-                            headers: {
-                                "Authorization": $.bcJwt.accessToken,
-                            },
                             type: 'GET',
                             dataType: 'json'
                         }).done(function (result) {
@@ -1106,9 +1090,6 @@
                 $.bcToken.check(function () {
                     return $.ajax({
                         url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/rename.json',
-                        headers: {
-                            "Authorization": $.bcJwt.accessToken,
-                        },
                         type: 'PATCH',
                         dataType: 'json',
                         data: {
@@ -1218,9 +1199,6 @@
             $.bcToken.check(function () {
                 return $.ajax({
                     url: $.bcUtil.apiAdminBaseUrl + 'baser-core/contents/move.json',
-                    headers: {
-                        "Authorization": $.bcJwt.accessToken,
-                    },
                     type: 'PATCH',
                     data: {
                         origin: {

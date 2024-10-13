@@ -65,7 +65,7 @@ use Cake\Utility\Hash;
         <span class="tag"><?php echo implode('</span><span class="tag">', h($tags)) ?></span>
       <?php endif ?>
     </td>
-  <?php endif ?>
+<?php endif ?>
 
   <?php if ($post->blog_content->comment_use): ?>
     <td class="bca-table-listup__tbody-td"><?php // コメント ?>
@@ -84,7 +84,7 @@ use Cake\Utility\Hash;
         <?php echo $comment ?>
       <?php endif ?>
     </td>
-  <?php endif ?>
+<?php endif ?>
 
   <td class="bca-table-listup__tbody-td"><?php // 作者 ?>
     <?php echo ($post->user)? h($this->BcBaser->getUserName($post->user)) : null ?>
@@ -103,7 +103,7 @@ use Cake\Utility\Hash;
       ['action' => 'unpublish', $post->blog_content->id, $post->id],
       [
         'title' => __d('baser_core', '非公開'),
-        'class' => 'btn-unpublish bca-btn-icon bca-loading',
+        'class' => 'btn-unpublish bca-btn-icon',
         'data-bca-btn-type' => 'unpublish',
         'data-bca-btn-size' => 'lg']
     ) ?>
@@ -113,15 +113,23 @@ use Cake\Utility\Hash;
       ['action' => 'publish', $post->blog_content->id, $post->id],
       [
         'title' => __d('baser_core', '公開'),
-        'class' => 'btn-publish bca-btn-icon bca-loading',
+        'class' => 'btn-publish bca-btn-icon',
         'data-bca-btn-type' => 'publish',
         'data-bca-btn-size' => 'lg']
     ) ?>
     <?php endif ?>
-    <?php $this->BcBaser->link('',
-      $this->request->getAttribute('currentContent')->url . '/archives/' . $post->no,
-      ['title' => __d('baser_core', '確認'), 'target' => '_blank', 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'preview', 'data-bca-btn-size' => 'lg']
-    ) ?>
+    <?php if ($this->Blog->allowPublish($post)): ?>
+      <?php $this->BcBaser->link('',
+        $this->request->getAttribute('currentContent')->url . '/archives/' . $post->no, [
+          'title' => __d('baser_core', '確認'),
+          'target' => '_blank',
+          'class' => 'bca-btn-icon',
+          'data-bca-btn-type' => 'preview',
+          'data-bca-btn-size' => 'lg'
+        ]) ?>
+    <?php else: ?>
+      <a title="確認" class="btn bca-btn-icon" data-bca-btn-type="preview" data-bca-btn-size="lg" data-bca-btn-status="gray"></a>
+    <?php endif ?>
     <?php $this->BcBaser->link('',
       ['action' => 'edit', $post->blog_content->id, $post->id],
       ['title' => __d('baser_core', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']
@@ -131,7 +139,7 @@ use Cake\Utility\Hash;
       ['action' => 'copy', $post->blog_content->id, $post->id],
       [
         'title' => __d('baser_core', 'コピー'),
-        'class' => 'btn-copy bca-btn-icon bca-loading',
+        'class' => 'btn-copy bca-btn-icon',
         'data-bca-btn-type' => 'copy',
         'data-bca-btn-size' => 'lg']
     ) ?>
@@ -141,7 +149,7 @@ use Cake\Utility\Hash;
       [
         'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？", $post->title),
         'title' => __d('baser_core', '削除'),
-        'class' => 'btn-delete bca-btn-icon bca-loading',
+        'class' => 'btn-delete bca-btn-icon',
         'data-bca-btn-type' => 'delete',
         'data-bca-btn-size' => 'lg']
     ) ?>

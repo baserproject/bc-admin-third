@@ -144,11 +144,7 @@ export default {
             this.refresh();
             // 開閉
             var url = $.bcUtil.apiAdminBaseUrl + "bc-favorite/favorites/get_favorite_box_opened.json";
-            axios.get(url, {
-                headers: {
-                    "Authorization": $.bcJwt.accessToken,
-                }
-            }).then(function (response) {
+            axios.get(url).then(function (response) {
                 if (response.data.result === "1") {
                     this.favoriteBoxOpened = "block";
                     this.ariaExpanded = 'false';
@@ -213,11 +209,7 @@ export default {
         refresh: function () {
             // 一覧呼び出し
             const indexUrl = $.bcUtil.apiAdminBaseUrl + "bc-favorite/favorites/index.json";
-            axios.get(indexUrl, {
-                headers: {
-                    "Authorization": $.bcJwt.accessToken,
-                }
-            }).then(function (response) {
+            axios.get(indexUrl).then(function (response) {
                 this.favorites = response.data.favorites;
             }.bind(this));
         },
@@ -235,6 +227,7 @@ export default {
          */
         formSubmitted: function () {
             this.refresh();
+            this.currentFavorite = null;
             this.$refs.modalFavoriteForm.closeModal();
         },
 
@@ -253,6 +246,7 @@ export default {
                 case 'FavoriteDelete':
                     if (!confirm(bcI18n.commonConfirmDeleteMessage)) return false;
                     var id = this.currentFavorite.id;
+                    let t = this;
                     $.bcToken.check(function () {
                         $("#Waiting").show();
                         axios.post($.bcUtil.apiAdminBaseUrl + "bc-favorite/favorites/delete/" + id + ".json", {}, {
@@ -261,9 +255,8 @@ export default {
                             }
                         }).then(function (response) {
                             if (response.status === 200) {
-                                $('#FavoriteRow' + id).fadeOut(300, function () {
-                                    $(this).remove();
-                                });
+                                t.refresh();
+                                t.currentFavorite = null;
                             } else {
                                 alert(bcI18n.alertServerError);
                             }

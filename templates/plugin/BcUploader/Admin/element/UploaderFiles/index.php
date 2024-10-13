@@ -29,12 +29,15 @@ echo $this->BcBaser->i18nScript([
   'uploaderAlertMessage2' => __d('baser_core', 'アップロードに失敗しました。ファイルサイズが大きいか、許可されていない形式です。'),
   'uploaderAlertMessage3' => __d('baser_core', 'このファイルの編集・削除はできません。'),
   'uploaderAlertMessage4' => __d('baser_core', 'サーバーでの処理に失敗しました。'),
-  'uploaderConfirmMessage1' => __d('baser_core', '本当に削除してもよろしいですか？'),
+  'uploaderConfirmMessage1' => __d('baser_core', 'を本当に削除してもよろしいですか？'),
   'uploaderFile' => __d('baser_core', 'ファイル'),
   'uploaderPublishBegin' => __d('baser_core', '公開開始日'),
   'uploaderPublishEnd' => __d('baser_core', '公開終了日')
 ], ['block' => false]);
-$this->BcBaser->js(['BcUploader.admin/uploader_files/index_panel.bundle']);
+// Ajaxで呼び出される前提のため、第２引数：インラインは true にしておく必要あり
+$this->BcBaser->js('BcUploader.admin/uploader_files/index_panel.bundle', true, [
+  'defer' => true
+]);
 ?>
 
 
@@ -47,16 +50,16 @@ $this->BcBaser->js(['BcUploader.admin/uploader_files/index_panel.bundle']);
 
 <!-- JS用設定値 -->
 <div style="display:none">
-  <div id="ListId"><?php echo $listId ?></div>
-  <div id="LoginUserId"><?php echo \BaserCore\Utility\BcUtil::loginUser()->id ?></div>
-  <div id="LoginUserGroupId"><?php echo \BaserCore\Utility\BcUtil::loginUser()->user_groups[0]->id ?></div>
-  <div id="AdminPrefix" style="display:none;"><?php echo \BaserCore\Utility\BcUtil::getAdminPrefix() ?></div>
-  <div id="UsePermission"><?php echo $uploaderConfigs->use_permission ?></div>
+  <div id="ListId"><?= h($listId) ?></div>
+  <div id="LoginUserId"><?= h(\BaserCore\Utility\BcUtil::loginUser()->id) ?></div>
+  <div id="LoginUserGroupId"><?= h(\BaserCore\Utility\BcUtil::loginUser()->user_groups[0]->id) ?></div>
+  <div id="AdminPrefix" style="display:none;"><?= h(\BaserCore\Utility\BcUtil::getAdminPrefix()) ?></div>
+  <div id="UsePermission"><?= h($uploaderConfigs->use_permission) ?></div>
 </div>
 
 
 <!-- ファイルリスト -->
-<div id="FileList<?php echo $listId ?>" class="file-list"></div>
+<div id="FileList<?php echo h($listId) ?>" class="file-list"></div>
 
 <!-- 編集ダイアログ -->
 <div id="EditDialog" title="<?php echo __d('baser_core', 'ファイル情報編集') ?>">

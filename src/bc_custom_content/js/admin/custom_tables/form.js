@@ -40,7 +40,8 @@ let customLinks = new Vue({
             enabledGroupValid: true,
             currentParentId: null,
             tableId: script.attr('data-tableId'),
-            displayPreview: true
+            displayPreview: true,
+            isAdd: script.attr('data-isAdd')
         }
     },
 
@@ -56,7 +57,9 @@ let customLinks = new Vue({
      */
     mounted: function () {
         // テンプレート内のツールチップがリセットされてしまうため再度ヘルプのツールチップを設定
-        $.bcUtil.initTooltip();
+        if(!this.isAdd) {
+            $.bcUtil.initTooltip();
+        }
     },
 
     /**
@@ -174,6 +177,14 @@ let customLinks = new Vue({
      * Methods
      */
     methods: {
+
+        /**
+         * テーブルを保存する
+         * 保存ボタン部分が Vue.js で制御されていないため、ここで制御
+         */
+        saveTable: function () {
+            $.bcUtil.showLoader();
+        },
 
         /**
          * 関連リンク詳細を開く
@@ -435,23 +446,35 @@ $(function () {
                     return;
                 }
 
-                let templateId = 'template-field-' + $(ui.item).attr('class').split(' ').filter(value => {
+                // テンプレートのクラスを取得
+                // "template-field-recruit_category" のようなクラス名
+                let templateClass = 'template-field-' + $(ui.item).attr('class').split(' ').filter(value => {
                     return (value.indexOf('available-field-') !== -1);
                 })[0].replace('available-field-', '');
 
                 let baseId = getNewBaseId();
                 let inUseFieldId = 'InUseField' + (baseId);
-                let tmpId = 'Tmp' + (baseId);
-                ui.item.attr('id', tmpId);
 
-                $(`#${tmpId}`).after($(`.${templateId}`).clone().attr('id', inUseFieldId).addClass('in-use-field').removeClass('template')).remove();
+                // テンプレートをクローンし、id を付与してクラスを処理
+                let template = $(`.${templateClass}`).clone()
+                    .attr('id', inUseFieldId)
+                    .addClass('in-use-field')
+                    .removeClass('template ' + templateClass);
+                // ドロップ対象の後に追加しドロップ対象は削除
+                ui.item.after(template).remove();
 
                 $(`#${inUseFieldId} input[name='template[name]']`).attr('name', `custom_links[new-${baseId}][name]`);
                 $(`#${inUseFieldId} input[name='template[custom_field_id]']`).attr('name', `custom_links[new-${baseId}][custom_field_id]`);
                 $(`#${inUseFieldId} input[name='template[sort]']`).attr('name', `custom_links[new-${baseId}][sort]`);
                 $(`#${inUseFieldId} input[name='template[title]']`).attr('name', `custom_links[new-${baseId}][title]`);
                 $(`#${inUseFieldId} input[name='template[display_front]']`).attr('name', `custom_links[new-${baseId}][display_front]`);
+                $(`#${inUseFieldId} input[name='template[use_api]']`).attr('name', `custom_links[new-${baseId}][use_api]`);
                 $(`#${inUseFieldId} input[name='template[status]']`).attr('name', `custom_links[new-${baseId}][status]`);
+
+                const $nameInput = $(`#${inUseFieldId} input[name='custom_links[new-${baseId}][name]']`);
+                if($nameInput.val() === 'group') {
+                    $nameInput.val('group_field');
+                }
 
                 registerEventToInUseField(inUseFieldId);
                 updateSort();

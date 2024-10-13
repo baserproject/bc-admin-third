@@ -134,7 +134,7 @@ $this->BcBaser->js('admin/users/form.bundle', false);
         <?php if ($this->request->getParam('action') == 'edit'): ?><small>
           [<?php echo __d('baser_core', 'パスワードは変更する場合のみ入力してください') ?>]</small><br/><?php endif ?>
         <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
-        <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
+        <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'autocomplete' => 'off', 'placeholder' => __d('baser_core', 'もう一度入力')]) ?>
         <i class="bca-icon--question-circle bca-help"></i>
         <div class="bca-helptext">
           <ul>
@@ -144,7 +144,6 @@ $this->BcBaser->js('admin/users/form.bundle', false);
               <?php endif; ?>
               <?php echo __d('baser_core', '確認のため２回入力してください。') ?></li>
             <li><?php echo __d('baser_core', '半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください') ?></li>
-            <li><?php echo __d('baser_core', '最低６文字以上で入力してください') ?></li>
           </ul>
         </div>
         <?php echo $this->BcAdminForm->error('password') ?>
@@ -156,8 +155,16 @@ $this->BcBaser->js('admin/users/form.bundle', false);
         <?php echo $this->BcAdminForm->label('status', __d('baser_core', '利用状態')) ?>
       </th>
       <td class="col-input bca-form-table__input">
-        <?php echo $this->BcAdminForm->control('status', ['type' => 'checkbox', 'label' => __d('baser_core', '有効')]) ?>
-        <?php echo $this->BcAdminForm->error('status') ?>
+        <?php if ($isUserGroupEditable): ?>
+          <?php echo $this->BcAdminForm->control('status', ['type' => 'checkbox', 'label' => __d('baser_core', '有効')]) ?>
+          <?php echo $this->BcAdminForm->error('status') ?>
+        <?php else: ?>
+          <?php if ($user->status): ?>
+            <span><?php echo __d('baser_core', '有効') ?></span>
+          <?php else: ?>
+            <span><?php echo __d('baser_core', '無効') ?></span>
+          <?php endif ?>
+        <?php endif ?>
       </td>
     </tr>
 
