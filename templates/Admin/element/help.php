@@ -30,7 +30,7 @@ if (!empty($pluginName)) {
 ?>
 
 
-<div id="Help">
+<div id="Help" class="clearfix bca-help">
 
   <h2 class="head bca-help__title">
     <i class="bca-icon--question-circle" data-bca-btn-size="md"></i>

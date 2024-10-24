@@ -18,9 +18,7 @@
  * @noTodo
  * @unitTest
  */
-$this->BcBaser->js('BcMail.admin/mail_fields/form.bundle', false, [
-  'defer' => true
-]);
+$this->BcBaser->js('BcMail.admin/mail_fields/form.bundle', false);
 $this->BcAdmin->setTitle(__d('baser_core', '{0}｜メールフィールド編集', $this->getRequest()->getAttribute('currentContent')->title));
 $this->BcAdmin->setHelp('mail_fields_form');
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
@@ -68,12 +66,11 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
       __d('baser_core', '削除'),
       ['action' => 'delete', $mailContent->id, $mailField->id],
       [
-        'class' => 'bca-btn bca-actions__item',
+        'class' => 'bca-submit-token button bca-btn bca-actions__item',
         'data-bca-btn-type' => 'delete',
         'data-bca-btn-size' => 'sm',
         'block' => true,
-        'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $mailField->name),
-        'data-bca-btn-color' => "danger"
+        'confirm' => __d('baser_core', '{0} を本当に削除してもいいですか？', $mailField->name)
       ]
     ) ?>
   </div>

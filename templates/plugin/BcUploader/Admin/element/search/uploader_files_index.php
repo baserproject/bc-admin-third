@@ -41,8 +41,7 @@ if (!isset($listId)) {
       'type' => 'select',
       'options' => $uploaderCategories,
       'empty' => __d('baser_core', '指定なし'),
-      'id' => 'FilterUploaderCategoryId' . $listId,
-      'style' => 'width:100%'
+      'id' => 'FilterUploaderCategoryId' . $listId
     ]) ?>
 	</span>
   <?php endif ?>

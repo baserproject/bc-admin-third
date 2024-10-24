@@ -36,10 +36,10 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
     <?php echo $this->BcAdminForm->control('no', ['type' => 'hidden']) ?>
   </span>
   <span class="bca-post__url">
-    <a href="<?php echo $fullUrl ?>"
+    <a href="<?php echo h($fullUrl) ?>"
        class="bca-text-url" target="_blank" data-toggle="tooltip" data-placement="top" title="<?php echo __d('baser_core', '公開URLを開きます') ?>">
       <i class="bca-icon--globe"></i>
-      <?php echo $fullUrl ?>
+      <?php echo h($fullUrl) ?>
     </a>
     <?php echo $this->BcAdminForm->button('', [
       'id' => 'BtnCopyUrl',
@@ -91,12 +91,10 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
         __d('baser_core', '削除'),
         ['action' => 'delete', $blogContent->id, $post->id],
         ['block' => true,
-          'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？\n\nブログ記事はゴミ箱に入らず完全に消去されます。", $post->title),
-          'class' => 'bca-btn bca-actions__item',
+          'confirm' => __d('baser_core', "{0} を本当に削除してもいいですか？\n\nブログ記事はゴミ箱に入らず完全に消去されます。", $post->name),
+          'class' => 'bca-submit-token button bca-btn bca-actions__item',
           'data-bca-btn-type' => 'delete',
-          'data-bca-btn-size' => 'sm',
-          'data-bca-btn-color' => "danger"
-        ]
+          'data-bca-btn-size' => 'sm']
       ) ?>
   </div>
 </section>
