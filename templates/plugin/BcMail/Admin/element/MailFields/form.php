@@ -110,7 +110,13 @@
             <li><?php echo __d('baser_core', '日付チェック：日付形式かどうかのチェックです。') ?></li>
             <li><?php echo __d('baser_core', 'ファイルアップロードサイズ制限：利用するには、「ファイル」タイプを選択し、オプション項目に、上限となるサイズを次の形式のように | 区切りで入力します。「maxFileSize|10（単位：MB）」') ?></li>
             <li><?php echo __d('baser_core', 'ファイル拡張子チェック：利用するには、「ファイル」タイプを選択し、オプション項目に、アップロードを許可する拡張子を次の形式のように | 区切りで入力します。「fileExt|jpg,pdf」<br>未設定の場合は「gif,jpg,jpeg,png,pdf」を許可します。') ?></li>
-            <li><?php echo __d('baser_core', '正規表現チェック：利用するには、オプション項目に、regex と正規表現を次の形式のように |（パイプ） 区切りで入力します。「regex|正規表現の内容」 入力した正規表現は以下の書式で実行されます。「/\A正規表現の内容\z/us」　（入力例）「regex|\d+」') ?></li>
+            <li><?php echo __d('baser_core', '正規表現チェック：利用するには、オプション項目に、regex と正規表現を |（パイプ） 区切りで入力します。入力した正規表現は <code>/\A正規表現の内容\z/us</code> として実行されます。') ?>　<br><br>
+              <strong><?php echo __d('baser_core', '【入力例】') ?></strong>
+              <ul>
+                <li><?php echo __d('baser_core', '数値') ?> : <pre>regex|\d+</pre></li>
+                <li><?php echo __d('baser_core', '郵便番号チェック（ハイフンあり・なしのどちらにも対応:）') ?> : <pre>regex|\d{3}-?\d{4}</pre></li>
+              </ul>
+            </li>
           </ul>
         </div>
         <?php echo $this->BcAdminForm->error('valid_ex') ?>
@@ -247,6 +253,18 @@
         <td class="col-input bca-form-table__input">
           <?php echo $this->BcAdminForm->control('options', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
           <?php echo $this->BcAdminForm->error('options') ?>
+          <i class="bca-icon--question-circle bca-help"></i>
+          <div class="bca-helptext">
+            <p>inputタグに対してオプションを設定します。</p>
+            <dl>
+              <dt>placeholder</dt>
+              <dd>プレースホルダー：利用するには、次の形式のように | 区切りで入力します。「placeholder|プレースホルダーの内容」</dd>
+              <dt>empty</dt>
+              <dd>セレクトボックスの何も選択していないときの表示は、次の形式のように | 区切りで入力します。「empty|何も選択していないときのメッセージ」</dd>
+              <dt>checkboxWrapTag</dt>
+              <dd>マルチチェックボックスでそれぞれのインプットタグをラッピングする要素を指定します。例）checkboxWrapTag|div class="checkbox"（div class="checkbox"で囲む）<br>※デフォルトはspanタグでラッピングされます。</dd>
+            </dl>
+          </div>
         </td>
       </tr>
       <tr id="RowAutoComplete">
