@@ -18,7 +18,6 @@ use BaserCore\View\BcAdminAppView;
  * @var array $deviceList
  * @var array $langList
  * @var array $siteList
- * @var Cake\Datasource\Paging\PaginatedResultSet $sites
  * @checked
  * @unitTest
  * @noTodo
@@ -127,7 +126,7 @@ $this->BcListTable->setColumnNumber(8);
   </tr>
   </thead>
   <tbody class="bca-table-listup__tbody">
-  <?php if (!$sites->items()->isEmpty()): ?>
+  <?php if (!$sites->isEmpty()): ?>
     <?php foreach($sites as $key => $site): ?>
       <?php $this->BcBaser->element('Sites/index_row', [
         'site' => $site,
